@@ -1,18 +1,26 @@
+import { reproducirSfxBoton } from './musica.js';
+
 // Botón de acción del juego (Z / Enter / Espacio + tap). Único punto donde
-// se define, para que el D-pad táctil de la Fase 6 se enchufe en un solo
-// lugar y todas las escenas filtren el auto-repeat igual.
+// se define: los botones táctiles del marco despachan estas mismas teclas y
+// todas las escenas filtran el auto-repeat igual.
 export const TECLAS_ACCION = ['Z', 'ENTER', 'SPACE'];
 
 const EVENTOS_ACCION = TECLAS_ACCION.map((tecla) => `keydown-${tecla}`);
 
-export function alPresionarAccion(scene, callback, { conTap = true } = {}) {
+// conSfx: beep de botón al accionar (apagado en el mundo, donde presionar
+// acción sin objetivo no debe sonar).
+export function alPresionarAccion(scene, callback, { conTap = true, conSfx = true } = {}) {
+  const accionar = () => {
+    if (conSfx) reproducirSfxBoton(scene);
+    callback();
+  };
   EVENTOS_ACCION.forEach((evento) => {
     scene.input.keyboard.on(evento, (e) => {
-      if (!e.repeat) callback();
+      if (!e.repeat) accionar();
     });
   });
   if (conTap) {
-    scene.input.on('pointerdown', () => callback());
+    scene.input.on('pointerdown', () => accionar());
   }
 }
 

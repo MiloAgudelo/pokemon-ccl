@@ -54,9 +54,13 @@ export default class WorldScene extends Phaser.Scene {
     this.cursores = this.input.keyboard.createCursorKeys();
     this.wasd = this.input.keyboard.addKeys('W,A,S,D');
     // Mismo botón de acción que el resto del juego (incluye tap en móvil).
-    alPresionarAccion(this, () => {
-      if (this.scene.isActive() && !this.movimiento.enMovimiento) this.interactuar();
-    });
+    alPresionarAccion(
+      this,
+      () => {
+        if (this.scene.isActive() && !this.movimiento.enMovimiento) this.interactuar();
+      },
+      { conSfx: false }
+    );
 
     this.crearHudInsignias();
   }

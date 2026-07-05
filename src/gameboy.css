@@ -438,6 +438,26 @@
   box-shadow: 0px 0px 2px #7c7be0 inset;
 }
 
+/* [CCL] botón de mute en el bisel de la pantalla */
+.gameboy .screen-area .silencio {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #67879a;
+  background: #2c313e;
+  color: #67879a;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10;
+}
+.gameboy .screen-area .silencio:active {
+  background: #1c2028;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -455,6 +475,7 @@ body {
   justify-content: center;
   align-items: center;
   background: black;
+  overflow: hidden; /* [CCL] la escala fraccional no debe generar scroll */
 }
 
 .gameboy {

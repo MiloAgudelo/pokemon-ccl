@@ -17,7 +17,7 @@ import {
 import { EDIFICIOS, urlEdificio } from '../data/edificios.js';
 import { cargarAssetsConPlaceholder, prometerCarga } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
-import { cargarMusica } from '../systems/musica.js';
+import { cargarMusica, alTerminarCargaMusica } from '../systems/musica.js';
 import { iniciarInsignias } from '../systems/insignias.js';
 import { MAPAS } from '../data/maps.js';
 
@@ -108,9 +108,18 @@ export default class BootScene extends Phaser.Scene {
     const assetsListos = (async () => {
       await cargarAssetsConPlaceholder(this, ASSETS_MILO);
       AVATARES.forEach((key) => crearAnimacionesCaminata(this, key));
-      await prometerCarga(this, () => cargarMusica(this));
     })();
 
-    Promise.all([assetsListos, fuenteLista]).then(() => this.scene.start(SCENE_KEYS.TITLE));
+    Promise.all([assetsListos, fuenteLista]).then(() => {
+      // El audio (~12MB) no bloquea el arranque: se lanza el title y la
+      // música suena en cuanto termine de descargar. Boot queda invisible
+      // debajo hasta entonces (su loader muere si la escena se detiene).
+      this.scene.launch(SCENE_KEYS.TITLE);
+      this.scene.setVisible(false);
+      prometerCarga(this, () => cargarMusica(this)).then(() => {
+        alTerminarCargaMusica(this);
+        this.scene.stop();
+      });
+    });
   }
 }

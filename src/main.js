@@ -8,32 +8,15 @@ import AvatarSelectScene from './scenes/AvatarSelectScene.js';
 import IntroScene from './scenes/IntroScene.js';
 import WorldScene from './scenes/WorldScene.js';
 import DialogueScene from './scenes/DialogueScene.js';
-import { conectarMarcoGba } from './marcoGba.js';
+import { conectarMarcoGba, ajustarEscalaConsola } from './marcoGba.js';
 import { conectarMute } from './systems/musica.js';
-
-// Espacio que ocupa el marco Game Boy Color alrededor del canvas
-// (paddings de body/carcasa/bisel + etiqueta GAME BOY COLOR + Nintendo).
-const MARGEN_MARCO_X = 210;
-const MARGEN_MARCO_Y = 265;
-
-// Zoom entero más grande que quepa en la ventana (mínimo 1): píxel nítido
-// a cualquier tamaño de pantalla.
-function calcularZoom() {
-  return Math.max(
-    1,
-    Math.min(
-      Math.floor((window.innerWidth - MARGEN_MARCO_X) / GAME_WIDTH),
-      Math.floor((window.innerHeight - MARGEN_MARCO_Y) / GAME_HEIGHT)
-    )
-  );
-}
 
 const juego = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'consola',
   width: GAME_WIDTH,
   height: GAME_HEIGHT,
-  zoom: calcularZoom(),
+  zoom: 1, // el zoom real lo fija ajustarEscalaConsola midiendo el marco
   pixelArt: true,
   roundPixels: true,
   backgroundColor: '#000000',
@@ -49,12 +32,11 @@ const juego = new Phaser.Game({
   ],
 });
 
-window.addEventListener('resize', () => {
-  juego.scale.setZoom(calcularZoom());
-});
-
 conectarMarcoGba();
 conectarMute(juego);
+juego.events.once(Phaser.Core.Events.READY, () => {
+  ajustarEscalaConsola(juego, GAME_WIDTH, GAME_HEIGHT);
+});
 
 // Handle de inspección para depurar desde la consola del navegador (solo dev).
 if (import.meta.env.DEV) {
