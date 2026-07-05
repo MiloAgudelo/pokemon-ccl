@@ -192,7 +192,7 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 
 - [x] Fase 0 — Esqueleto _(2026-07-04)_
 - [x] Fase 1 — Movimiento y colisión _(2026-07-04, Checkpoint 1 ✔)_
-- [ ] Fase 2 — Diálogo y contenido
+- [x] Fase 2 — Diálogo y contenido _(2026-07-04)_
 - [ ] Fase 3 — Flujo de entrada
 - [ ] Fase 4 — Mapa real
 - [ ] Fase 5 — Progresión
@@ -212,3 +212,10 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - **Checkpoint 1 (thermo-nuclear) ✔** — 0 críticos, 1 mayor y 4 menores. Atendidos: patrón genérico "asset real o placeholder" extraído a `src/systems/loader.js` (mayor); clave+datos del mapa unificados en `src/data/maps.js`; claves del registry centralizadas en `REGISTRY_KEYS` (`src/config.js`); `detener()` con early-return si ya está idle.
 - **Deuda técnica** (no crítica, revisar en Fase 7): la URL de la fuente en `index.html` (`/ui/fonts/...`) asume despliegue en raíz; con `base` distinto (ej. GitHub Pages) hay que verificar que Vite la reescriba o usar ruta relativa. Las URLs de assets en runtime ya usan `import.meta.env.BASE_URL`.
 - **Compromiso de diseño para Fase 2** (de la revisión): el diálogo se implementa como escena overlay paralela que pausa `World` (`scene.pause`/`resume`), no como flags booleanos dentro del `update()` de World.
+
+**Fase 2 (2026-07-04)** — Completada. `content.json` con las 15 pantallas de la Ayuda #1 (texto real, `[PENDIENTE]` intactos), cuadro de diálogo GBA (tipeo letra a letra, indicador triangular parpadeante, paginación automática con word-wrap real — un párrafo largo en el JSON solo genera más páginas, nunca se desborda), interacción con Z/Enter/Espacio/tap, y 5 puntos de interacción en el mapa de prueba (capitulos, convocados, alimentacion, equipamiento, ruta_acceso) definidos en la capa de objetos con `content_id`. El diálogo es escena overlay que pausa World (compromiso del Checkpoint 1 cumplido). Desviaciones/decisiones:
+- Los emojis decorativos del documento (🗺📅🍽 etc.) se omiten en `content.json`: Press Start 2P no tiene esos glifos y renderizarían rotos a 8px. Ninguna palabra del texto se perdió. Igual con ▶/▼: los indicadores se dibujan como triángulos, no como glifos.
+- Se agregó "sistema" como `tipo` extra (portada, intro_oak) para las pantallas que consumen escenas propias en vez de NPCs del mapa; "npc/cartel/zona" se mantienen para puntos del mapa.
+- La entrada `portada` lleva campos extra (`subtitulo`, `prompt`) que usará el title screen (Fase 3).
+- Los NPCs bloquean el paso (se interactúa desde la casilla adyacente, como en Pokémon).
+- `{nombre}` se interpola desde el registry; default "ROVER" hasta que exista el input de nombre (Fase 3).
