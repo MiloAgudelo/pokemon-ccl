@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
+import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { guardarLocal, leerLocal } from '../systems/almacen.js';
 import { FONDO_MENU_KEY } from '../systems/placeholders.js';
@@ -33,7 +33,7 @@ export default class NameInputScene extends Phaser.Scene {
     this.aviso = this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.72, 'ENTER/START para continuar', {
         ...TEXT_STYLE,
-        color: '#88a0b8',
+        color: PALETA.pista,
       })
       .setOrigin(0.5);
 
@@ -49,7 +49,7 @@ export default class NameInputScene extends Phaser.Scene {
     const nombre = input.value.trim().toUpperCase().slice(0, LARGO_MAX);
 
     if (nombre.length === 0) {
-      this.aviso.setText('¡Escribe un nombre!').setColor('#f87858');
+      this.aviso.setText('¡Escribe un nombre!').setColor(PALETA.error);
       return;
     }
 

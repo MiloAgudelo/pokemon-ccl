@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { SCENE_KEYS, REGISTRY_KEYS, TILE_SIZE } from '../config.js';
+import { SCENE_KEYS, REGISTRY_KEYS, TILE_SIZE, TEXT_STYLE, PALETA } from '../config.js';
 import { TILESET_KEY, NPC_KEY, CARTEL_KEY } from '../systems/placeholders.js';
 import GridMovement, { DIRS } from '../systems/GridMovement.js';
 import { MAPAS } from '../data/maps.js';
@@ -7,9 +7,16 @@ import { getContenido } from '../data/content.js';
 import { entrarConFundido } from '../systems/transiciones.js';
 import { TECLAS_ACCION } from '../systems/controles.js';
 import { reproducirMusica } from '../systems/musica.js';
+import { obtenerInsignias, insigniasCompletas, TOTAL_INSIGNIAS } from '../systems/insignias.js';
 
 const SPAWN = { tileX: 29, tileY: 36 };
 const AVATAR_DEFAULT = 'rover_m';
+// Sprite del punto de interacción según el tipo de su entrada de contenido.
+const TEXTURA_POR_TIPO = {
+  cartel: CARTEL_KEY,
+  npc: NPC_KEY,
+  zona: NPC_KEY,
+};
 
 // Escena principal de exploración: tilemap + jugador + NPCs interactivos + cámara.
 export default class WorldScene extends Phaser.Scene {
@@ -45,6 +52,36 @@ export default class WorldScene extends Phaser.Scene {
     this.teclasAccion = TECLAS_ACCION.map((tecla) =>
       this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[tecla])
     );
+
+    this.crearHudInsignias();
+  }
+
+  // Contador de insignias fijo en la esquina superior izquierda.
+  crearHudInsignias() {
+    const fondo = this.add
+      .rectangle(4, 4, 136, 16, PALETA.cajaFondo, 0.85)
+      .setOrigin(0, 0)
+      .setStrokeStyle(1, PALETA.cajaBorde)
+      .setScrollFactor(0)
+      .setDepth(10000);
+    this.hudInsignias = this.add
+      .text(10, 8, '', TEXT_STYLE)
+      .setScrollFactor(0)
+      .setDepth(10001);
+    this.actualizarHud();
+
+    const alCambiar = () => this.actualizarHud();
+    this.registry.events.on(`changedata-${REGISTRY_KEYS.INSIGNIAS}`, alCambiar);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.registry.events.off(`changedata-${REGISTRY_KEYS.INSIGNIAS}`, alCambiar);
+    });
+    // ancho del fondo ajustado al texto
+    fondo.width = this.hudInsignias.width + 12;
+  }
+
+  actualizarHud() {
+    const n = obtenerInsignias(this.registry).length;
+    this.hudInsignias.setText(`INSIGNIAS ${n}/${TOTAL_INSIGNIAS}`);
   }
 
   // Edificios y decoraciones grandes: imágenes sobre el tilemap (la colisión
@@ -77,7 +114,7 @@ export default class WorldScene extends Phaser.Scene {
 
       const tileX = Math.floor(obj.x / TILE_SIZE);
       const tileY = Math.floor(obj.y / TILE_SIZE);
-      const textura = entrada.tipo === 'cartel' ? CARTEL_KEY : NPC_KEY;
+      const textura = TEXTURA_POR_TIPO[entrada.tipo] || NPC_KEY;
       const pieY = (tileY + 1) * TILE_SIZE;
       this.add
         .sprite(tileX * TILE_SIZE + TILE_SIZE / 2, pieY, textura)
@@ -111,8 +148,13 @@ export default class WorldScene extends Phaser.Scene {
   interactuar() {
     const { dx, dy } = DIRS[this.movimiento.dir];
     const objetivo = `${this.movimiento.tileX + dx},${this.movimiento.tileY + dy}`;
-    const contentId = this.interacciones.get(objetivo);
+    let contentId = this.interacciones.get(objetivo);
     if (!contentId) return;
+
+    // Con las 7 insignias, el Hall of Fame muestra la pantalla de cierre.
+    if (contentId === 'hall_of_fame' && insigniasCompletas(this.registry)) {
+      contentId = 'hall_of_fame_completo';
+    }
 
     // El diálogo corre como escena overlay; esta escena se pausa y el
     // diálogo la reanuda al cerrar.

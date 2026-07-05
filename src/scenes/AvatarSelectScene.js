@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
+import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { guardarLocal, leerLocal } from '../systems/almacen.js';
 import { alPresionarAccion } from '../systems/controles.js';
@@ -33,13 +33,13 @@ export default class AvatarSelectScene extends Phaser.Scene {
         .setOrigin(0.5, 1)
         .setScale(ESCALA_SPRITE);
       this.add
-        .text(POSICIONES_X[i], SPRITE_Y + 14, NOMBRES[i], { ...TEXT_STYLE, color: '#88a0b8' })
+        .text(POSICIONES_X[i], SPRITE_Y + 14, NOMBRES[i], { ...TEXT_STYLE, color: PALETA.pista })
         .setOrigin(0.5);
     });
 
     this.marco = this.add
       .rectangle(POSICIONES_X[0], SPRITE_Y - (32 * ESCALA_SPRITE) / 2, 16 * ESCALA_SPRITE + 12, 32 * ESCALA_SPRITE + 14)
-      .setStrokeStyle(1, 0xf8d048);
+      .setStrokeStyle(1, PALETA.acentoHex);
 
     const guardado = OPCIONES.findIndex((o) => o.key === leerLocal(REGISTRY_KEYS.AVATAR));
     this.seleccion = guardado >= 0 ? guardado : 0;
@@ -48,7 +48,7 @@ export default class AvatarSelectScene extends Phaser.Scene {
     this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.88, 'A/Z/ENTER para confirmar', {
         ...TEXT_STYLE,
-        color: '#88a0b8',
+        color: PALETA.pista,
       })
       .setOrigin(0.5);
 

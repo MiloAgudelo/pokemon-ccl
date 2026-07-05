@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
+import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
 import { getContenido, interpolar } from '../data/content.js';
 import { alPresionarAccion } from '../systems/controles.js';
+import { desbloquearInsignia, obtenerInsignias, TOTAL_INSIGNIAS } from '../systems/insignias.js';
 
 const MARGEN = 6;
 const ALTO_CAJA = 72;
@@ -41,16 +42,16 @@ export default class DialogueScene extends Phaser.Scene {
 
     // Marco placeholder: caja oscura con borde blanco simple.
     this.add
-      .rectangle(MARGEN, cajaY, anchoCaja, ALTO_CAJA, 0x203048)
+      .rectangle(MARGEN, cajaY, anchoCaja, ALTO_CAJA, PALETA.cajaFondo)
       .setOrigin(0, 0)
-      .setStrokeStyle(1, 0xf8f8f8);
+      .setStrokeStyle(1, PALETA.cajaBorde);
 
     if (entrada.titulo) {
       const anchoTitulo = entrada.titulo.length * 8 + RELLENO * 2;
       this.add
-        .rectangle(MARGEN, cajaY - ALTO_TITULO + 1, anchoTitulo, ALTO_TITULO, 0x203048)
+        .rectangle(MARGEN, cajaY - ALTO_TITULO + 1, anchoTitulo, ALTO_TITULO, PALETA.cajaFondo)
         .setOrigin(0, 0)
-        .setStrokeStyle(1, 0xf8f8f8);
+        .setStrokeStyle(1, PALETA.cajaBorde);
       this.add.text(MARGEN + RELLENO, cajaY - ALTO_TITULO + 6, entrada.titulo, TEXT_STYLE);
     }
 
@@ -73,7 +74,18 @@ export default class DialogueScene extends Phaser.Scene {
       },
     });
 
-    this.paginas = this.paginar(entrada.paginas.map((pagina) => interpolar(pagina, { nombre })));
+    const paginasContenido = entrada.paginas.map((pagina) => interpolar(pagina, { nombre }));
+    // Punto con insignia aún no obtenida: página extra de obtención al final,
+    // estilo "¡Obtuviste la MEDALLA X!" de GBA. Se desbloquea al cerrar.
+    this.insigniaPendiente = null;
+    if (entrada.insignia && !obtenerInsignias(this.registry).includes(entrada.insignia)) {
+      this.insigniaPendiente = entrada.insignia;
+      const numero = obtenerInsignias(this.registry).length + 1;
+      paginasContenido.push(
+        `¡${nombre} obtuvo la insignia de ${entrada.insignia}! (${numero}/${TOTAL_INSIGNIAS})`
+      );
+    }
+    this.paginas = this.paginar(paginasContenido);
     this.pagina = 0;
     this.tipeo = null;
     this.mostrarPagina();
@@ -150,6 +162,9 @@ export default class DialogueScene extends Phaser.Scene {
   }
 
   cerrar() {
+    if (this.insigniaPendiente) {
+      desbloquearInsignia(this.registry, this.insigniaPendiente);
+    }
     this.scene.stop();
     this.scene.resume(this.escenaPadre);
   }

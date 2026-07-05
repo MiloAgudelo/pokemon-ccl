@@ -13,6 +13,16 @@ export function getContenido(id) {
   return entrada || null;
 }
 
+// Para entradas que las escenas necesitan sí o sí (portada, intro_oak):
+// falla fuerte con mensaje claro en vez de un TypeError críptico.
+export function getContenidoRequerido(id) {
+  const entrada = porId.get(id);
+  if (!entrada) {
+    throw new Error(`content.json no tiene la entrada requerida "${id}"`);
+  }
+  return entrada;
+}
+
 // Reemplaza marcadores {variable} en un texto. Los que no tengan valor se
 // dejan intactos (ej. los [PENDIENTE] no usan esta sintaxis y no se tocan).
 export function interpolar(texto, variables) {

@@ -1,8 +1,13 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS } from '../config.js';
-import { getContenido } from '../data/content.js';
+import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, PALETA } from '../config.js';
+import { getContenido, getContenidoRequerido } from '../data/content.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
-import { LOGO_KEY, FONDO_MENU_KEY } from '../systems/placeholders.js';
+import {
+  LOGO_KEY,
+  FONDO_MENU_KEY,
+  POKEBOLA_KEY,
+  createPokebolaTexture,
+} from '../systems/placeholders.js';
 import { alPresionarAccion } from '../systems/controles.js';
 import { reproducirMusica } from '../systems/musica.js';
 
@@ -17,9 +22,9 @@ export default class TitleScene extends Phaser.Scene {
     reproducirMusica(this, 'titulo');
     this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
     this.add
-      .text(GAME_WIDTH - 8, 8, 'M: música', { ...TEXT_STYLE, color: '#88a0b8' })
+      .text(GAME_WIDTH - 8, 8, 'M: música', { ...TEXT_STYLE, color: PALETA.pista })
       .setOrigin(1, 0);
-    const portada = getContenido('portada');
+    const portada = getContenidoRequerido('portada');
 
     if (this.textures.exists(LOGO_KEY)) {
       this.add.image(GAME_WIDTH / 2, GAME_HEIGHT * 0.36, LOGO_KEY);
@@ -32,7 +37,7 @@ export default class TitleScene extends Phaser.Scene {
         .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.42, portada.subtitulo, {
           ...TEXT_STYLE,
           fontSize: '16px',
-          color: '#f8d048',
+          color: PALETA.acento,
         })
         .setOrigin(0.5);
     }
@@ -57,5 +62,33 @@ export default class TitleScene extends Phaser.Scene {
     });
 
     alPresionarAccion(this, () => irConFundido(this, SCENE_KEYS.NAME_INPUT));
+    this.crearEasterEgg();
+  }
+
+  // Pokébola-QR oculta (pantalla 2 de la Ayuda): discreta en la esquina.
+  // Vive en el title y no en la intro porque la intro pasa pausada bajo el
+  // diálogo de Oak y no recibiría el clic (desviación anotada en el roadmap).
+  crearEasterEgg() {
+    createPokebolaTexture(this);
+    const pokebola = this.add
+      .image(14, GAME_HEIGHT - 14, POKEBOLA_KEY)
+      .setAlpha(0.7)
+      .setInteractive({ useHandCursor: true });
+
+    pokebola.on('pointerdown', (puntero, x, y, evento) => {
+      evento.stopPropagation(); // que el tap no dispare "iniciar aventura"
+      const entrada = getContenido('easter_egg_staff');
+      if (!entrada) return;
+      if (entrada.url && !entrada.url.startsWith('[PENDIENTE')) {
+        window.open(entrada.url, '_blank');
+      } else {
+        // Aún sin URL del video: mostrar el mensaje del hallazgo.
+        this.scene.launch(SCENE_KEYS.DIALOGUE, {
+          contentId: 'easter_egg_staff',
+          escenaPadre: SCENE_KEYS.TITLE,
+        });
+        this.scene.pause();
+      }
+    });
   }
 }
