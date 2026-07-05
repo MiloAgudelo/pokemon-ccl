@@ -15,3 +15,17 @@ export function alPresionarAccion(scene, callback, { conTap = true } = {}) {
     scene.input.on('pointerdown', () => callback());
   }
 }
+
+// Botón B (X en teclado): cancelar/atrás; en diálogos avanza, como en Pokémon.
+export function alPresionarB(scene, callback) {
+  scene.input.keyboard.on('keydown-X', (e) => {
+    if (!e.repeat) callback();
+  });
+}
+
+// Salto/atajo (ESC en teclado, Select en el marco).
+export function alPresionarSalto(scene, callback) {
+  scene.input.keyboard.on('keydown-ESC', (e) => {
+    if (!e.repeat) callback();
+  });
+}

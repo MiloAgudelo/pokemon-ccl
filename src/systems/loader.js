@@ -19,20 +19,32 @@ async function existeImagen(url) {
   }
 }
 
+// Una corrida del loader como promesa: `encolar` agrega los archivos y aquí
+// se arranca y espera el `complete`. Las cargas de Boot deben ser
+// secuenciales entre sí — dos corridas entrelazadas del mismo LoaderPlugin
+// comparten el evento `complete` y el orden deja de ser confiable.
+export function prometerCarga(scene, encolar) {
+  return new Promise((resolver) => {
+    encolar();
+    if (scene.load.list.size === 0) {
+      resolver();
+      return;
+    }
+    scene.load.once('complete', resolver);
+    scene.load.start();
+  });
+}
+
 // definiciones: [{ key, url, tipo: 'spritesheet'|'image', frameConfig?, crearPlaceholder(scene) }]
 export async function cargarAssetsConPlaceholder(scene, definiciones) {
   const disponibles = await Promise.all(definiciones.map(({ url }) => existeImagen(assetUrl(url))));
   const reales = definiciones.filter((_, i) => disponibles[i]);
 
-  if (reales.length > 0) {
-    await new Promise((resolver) => {
-      reales.forEach(({ key, url, tipo, frameConfig }) => {
-        scene.load[tipo](key, assetUrl(url), frameConfig);
-      });
-      scene.load.once('complete', resolver);
-      scene.load.start();
+  await prometerCarga(scene, () => {
+    reales.forEach(({ key, url, tipo, frameConfig }) => {
+      scene.load[tipo](key, assetUrl(url), frameConfig);
     });
-  }
+  });
 
   definiciones.forEach((def) => {
     if (!scene.textures.exists(def.key)) def.crearPlaceholder(scene);

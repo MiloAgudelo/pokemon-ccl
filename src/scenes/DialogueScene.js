@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
 import { getContenido, interpolar } from '../data/content.js';
 import { alPresionarAccion } from '../systems/controles.js';
-import { desbloquearInsignia, obtenerInsignias, TOTAL_INSIGNIAS } from '../systems/insignias.js';
+import { desbloquearInsignia, paginaDeObtencion } from '../systems/insignias.js';
+import { alPresionarB, alPresionarSalto } from '../systems/controles.js';
 
 const MARGEN = 6;
 const ALTO_CAJA = 72;
@@ -77,14 +78,9 @@ export default class DialogueScene extends Phaser.Scene {
     const paginasContenido = entrada.paginas.map((pagina) => interpolar(pagina, { nombre }));
     // Punto con insignia aún no obtenida: página extra de obtención al final,
     // estilo "¡Obtuviste la MEDALLA X!" de GBA. Se desbloquea al cerrar.
-    this.insigniaPendiente = null;
-    if (entrada.insignia && !obtenerInsignias(this.registry).includes(entrada.insignia)) {
-      this.insigniaPendiente = entrada.insignia;
-      const numero = obtenerInsignias(this.registry).length + 1;
-      paginasContenido.push(
-        `¡${nombre} obtuvo la insignia de ${entrada.insignia}! (${numero}/${TOTAL_INSIGNIAS})`
-      );
-    }
+    const paginaInsignia = paginaDeObtencion(this.registry, entrada, nombre);
+    this.insigniaPendiente = paginaInsignia ? entrada.id : null;
+    if (paginaInsignia) paginasContenido.push(paginaInsignia);
     this.paginas = this.paginar(paginasContenido);
     this.pagina = 0;
     this.tipeo = null;
@@ -92,12 +88,8 @@ export default class DialogueScene extends Phaser.Scene {
 
     alPresionarAccion(this, () => this.avanzar());
     // B también avanza (como en Pokémon); ESC/Select salta el diálogo entero.
-    this.input.keyboard.on('keydown-X', (e) => {
-      if (!e.repeat) this.avanzar();
-    });
-    this.input.keyboard.on('keydown-ESC', (e) => {
-      if (!e.repeat) this.cerrar();
-    });
+    alPresionarB(this, () => this.avanzar());
+    alPresionarSalto(this, () => this.cerrar());
   }
 
   // Divide los párrafos del contenido en páginas que caben en la caja, usando

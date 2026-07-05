@@ -23,6 +23,12 @@ export function getContenidoRequerido(id) {
   return entrada;
 }
 
+// Entradas que otorgan insignia (campo `insignia` = nombre visible;
+// la identidad persistente es el `id` de la entrada).
+export function pantallasConInsignia() {
+  return contenido.pantallas.filter((entrada) => entrada.insignia);
+}
+
 // Reemplaza marcadores {variable} en un texto. Los que no tengan valor se
 // dejan intactos (ej. los [PENDIENTE] no usan esta sintaxis y no se tocan).
 export function interpolar(texto, variables) {

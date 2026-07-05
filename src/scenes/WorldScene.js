@@ -5,11 +5,10 @@ import GridMovement, { DIRS } from '../systems/GridMovement.js';
 import { MAPAS } from '../data/maps.js';
 import { getContenido } from '../data/content.js';
 import { entrarConFundido } from '../systems/transiciones.js';
-import { TECLAS_ACCION } from '../systems/controles.js';
+import { alPresionarAccion } from '../systems/controles.js';
 import { reproducirMusica } from '../systems/musica.js';
-import { obtenerInsignias, insigniasCompletas, TOTAL_INSIGNIAS } from '../systems/insignias.js';
+import { obtenerInsignias, resolverContentId, TOTAL_INSIGNIAS } from '../systems/insignias.js';
 
-const SPAWN = { tileX: 29, tileY: 36 };
 const AVATAR_DEFAULT = 'rover_m';
 // Sprite del punto de interacción según el tipo de su entrada de contenido.
 const TEXTURA_POR_TIPO = {
@@ -37,10 +36,15 @@ export default class WorldScene extends Phaser.Scene {
     this.crearObjetosInteractivos();
 
     // El avatar lo fija la selección de personaje (Fase 3); mientras tanto, default.
+    // El spawn viene como propiedad del mapa (lo valida el generador).
+    const props = Object.fromEntries(
+      (this.mapa.properties || []).map((p) => [p.name, p.value])
+    );
     const avatar = this.registry.get(REGISTRY_KEYS.AVATAR) || AVATAR_DEFAULT;
     this.jugador = this.add.sprite(0, 0, avatar, 0);
     this.movimiento = new GridMovement(this, this.jugador, {
-      ...SPAWN,
+      tileX: props.spawn_tx ?? 1,
+      tileY: props.spawn_ty ?? 1,
       estaBloqueado: (tileX, tileY) => this.estaBloqueado(tileX, tileY),
     });
 
@@ -49,9 +53,10 @@ export default class WorldScene extends Phaser.Scene {
 
     this.cursores = this.input.keyboard.createCursorKeys();
     this.wasd = this.input.keyboard.addKeys('W,A,S,D');
-    this.teclasAccion = TECLAS_ACCION.map((tecla) =>
-      this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[tecla])
-    );
+    // Mismo botón de acción que el resto del juego (incluye tap en móvil).
+    alPresionarAccion(this, () => {
+      if (this.scene.isActive() && !this.movimiento.enMovimiento) this.interactuar();
+    });
 
     this.crearHudInsignias();
   }
@@ -128,11 +133,6 @@ export default class WorldScene extends Phaser.Scene {
     // Orden por Y, como el overworld GBA: lo que está más abajo tapa.
     this.jugador.setDepth(this.jugador.y);
 
-    if (this.accionJustoPresionada() && !this.movimiento.enMovimiento) {
-      this.interactuar();
-      return;
-    }
-
     const dir = this.direccionPresionada();
     if (dir) {
       this.movimiento.intentarMover(dir);
@@ -141,20 +141,15 @@ export default class WorldScene extends Phaser.Scene {
     }
   }
 
-  accionJustoPresionada() {
-    return this.teclasAccion.some((tecla) => Phaser.Input.Keyboard.JustDown(tecla));
-  }
-
   interactuar() {
     const { dx, dy } = DIRS[this.movimiento.dir];
     const objetivo = `${this.movimiento.tileX + dx},${this.movimiento.tileY + dy}`;
-    let contentId = this.interacciones.get(objetivo);
-    if (!contentId) return;
+    const puntoId = this.interacciones.get(objetivo);
+    if (!puntoId) return;
 
-    // Con las 7 insignias, el Hall of Fame muestra la pantalla de cierre.
-    if (contentId === 'hall_of_fame' && insigniasCompletas(this.registry)) {
-      contentId = 'hall_of_fame_completo';
-    }
+    // Las variantes por progreso (ej. Hall of Fame completo) las decide
+    // el sistema de insignias, no esta escena.
+    const contentId = resolverContentId(this.registry, puntoId);
 
     // El diálogo corre como escena overlay; esta escena se pausa y el
     // diálogo la reanuda al cerrar.

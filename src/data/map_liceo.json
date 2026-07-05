@@ -10,6 +10,18 @@
  "tileheight": 16,
  "nextlayerid": 5,
  "nextobjectid": 129,
+ "properties": [
+  {
+   "name": "spawn_tx",
+   "type": "int",
+   "value": 29
+  },
+  {
+   "name": "spawn_ty",
+   "type": "int",
+   "value": 36
+  }
+ ],
  "tilesets": [
   {
    "firstgid": 1,

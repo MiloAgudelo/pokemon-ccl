@@ -171,6 +171,11 @@ const mapa = {
   type: 'map', version: '1.10', orientation: 'orthogonal', renderorder: 'right-down',
   infinite: false, width: W, height: H, tilewidth: 16, tileheight: 16,
   nextlayerid: 5, nextobjectid: objetoId,
+  // El spawn viaja con el mapa: la validación de arriba protege al runtime.
+  properties: [
+    { name: 'spawn_tx', type: 'int', value: SPAWN.tx },
+    { name: 'spawn_ty', type: 'int', value: SPAWN.ty },
+  ],
   tilesets: [{
     firstgid: 1, name: 'placeholder', image: 'tileset_placeholder',
     imagewidth: 64, imageheight: 48, tilewidth: 16, tileheight: 16,

@@ -21,7 +21,10 @@ export function cargarMusica(scene) {
 }
 
 export function reproducirMusica(scene, nombre) {
-  if (pistaActual === nombre) return;
+  // No confiar solo en la memoria del módulo: si algo detuvo el sonido
+  // (stopAll externo, reinicio de escenas), hay que arrancar de nuevo.
+  const yaSuena = scene.sound.get(`musica_${nombre}`);
+  if (pistaActual === nombre && yaSuena && yaSuena.isPlaying) return;
   pistaActual = nombre;
 
   const sonido = scene.sound;
@@ -44,6 +47,7 @@ export function reproducirMusica(scene, nombre) {
 // Mute global con la tecla M (el botón visual llega con el pulido de Fase 6).
 export function conectarMute(game) {
   window.addEventListener('keydown', (e) => {
+    if (e.target instanceof HTMLInputElement) return; // escribiendo el nombre
     if (e.code === 'KeyM' && !e.repeat) {
       game.sound.mute = !game.sound.mute;
     }

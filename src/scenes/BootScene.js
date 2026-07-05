@@ -15,7 +15,7 @@ import {
   FONDO_MENU_KEY,
 } from '../systems/placeholders.js';
 import { EDIFICIOS, urlEdificio } from '../data/edificios.js';
-import { cargarAssetsConPlaceholder } from '../systems/loader.js';
+import { cargarAssetsConPlaceholder, prometerCarga } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
 import { cargarMusica } from '../systems/musica.js';
 import { iniciarInsignias } from '../systems/insignias.js';
@@ -104,17 +104,13 @@ export default class BootScene extends Phaser.Scene {
     // El texto in-game depende de Press Start 2P; no se arranca sin ella
     // (o sin que el navegador reporte el fallo, para no colgar el juego).
     const fuenteLista = document.fonts.load(`8px ${FONT_FAMILY}`).catch(() => {});
-    const assetsListos = cargarAssetsConPlaceholder(this, ASSETS_MILO).then(() => {
+    // Cargas del loader en secuencia (nunca dos corridas entrelazadas).
+    const assetsListos = (async () => {
+      await cargarAssetsConPlaceholder(this, ASSETS_MILO);
       AVATARES.forEach((key) => crearAnimacionesCaminata(this, key));
-    });
-    const musicaLista = new Promise((resolver) => {
-      cargarMusica(this);
-      this.load.once('complete', resolver);
-      this.load.start();
-    });
+      await prometerCarga(this, () => cargarMusica(this));
+    })();
 
-    Promise.all([assetsListos, fuenteLista, musicaLista]).then(() =>
-      this.scene.start(SCENE_KEYS.TITLE)
-    );
+    Promise.all([assetsListos, fuenteLista]).then(() => this.scene.start(SCENE_KEYS.TITLE));
   }
 }
