@@ -7,6 +7,10 @@ import { TILE_SIZE } from '../config.js';
 export const TILESET_KEY = 'tileset_placeholder';
 export const NPC_KEY = 'npc_placeholder';
 export const CARTEL_KEY = 'cartel_placeholder';
+// Claves de assets [MILO] con placeholder: la textura llega con esta clave
+// tanto si se cargó el PNG real como si se generó por código.
+export const OAK_KEY = 'oak';
+export const LOGO_KEY = 'logo_ccl';
 
 // Índices de tile dentro del tileset placeholder (gid = índice + 1 en Tiled).
 const TILE_COLORS = [
@@ -33,6 +37,23 @@ export function createTilesetTexture(scene) {
     ctx.fillRect(x + 10, 9, 2, 2);
   });
 
+  canvas.refresh();
+}
+
+// Profesor Oak placeholder: bata blanca, pelo gris, 24×32.
+export function createOakTexture(scene) {
+  if (scene.textures.exists(OAK_KEY)) return;
+
+  const canvas = scene.textures.createCanvas(OAK_KEY, 24, 32);
+  const ctx = canvas.getContext();
+  ctx.fillStyle = '#f0f0f0'; // bata
+  ctx.fillRect(4, 13, 16, 19);
+  ctx.fillStyle = '#e8c090'; // cara
+  ctx.fillRect(7, 5, 10, 9);
+  ctx.fillStyle = '#b8b8b8'; // pelo
+  ctx.fillRect(6, 1, 12, 5);
+  ctx.fillStyle = '#a03028'; // corbata
+  ctx.fillRect(11, 14, 2, 8);
   canvas.refresh();
 }
 

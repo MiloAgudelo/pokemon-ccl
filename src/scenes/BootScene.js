@@ -5,6 +5,9 @@ import {
   createPlayerTexture,
   createNpcTexture,
   createCartelTexture,
+  createOakTexture,
+  OAK_KEY,
+  LOGO_KEY,
 } from '../systems/placeholders.js';
 import { cargarAssetsConPlaceholder } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
@@ -25,6 +28,19 @@ const ASSETS_MILO = [
     tipo: 'spritesheet',
     frameConfig: { frameWidth: 16, frameHeight: 32 },
     crearPlaceholder: (scene) => createPlayerTexture(scene, 'rover_f', '#7048c8'),
+  },
+  {
+    key: OAK_KEY,
+    url: '/sprites/oak.png',
+    tipo: 'image',
+    crearPlaceholder: (scene) => createOakTexture(scene),
+  },
+  {
+    key: LOGO_KEY,
+    url: '/ui/logo_ccl.png',
+    tipo: 'image',
+    // Sin placeholder de textura: el title screen usa texto si no hay logo.
+    crearPlaceholder: () => {},
   },
 ];
 
@@ -56,6 +72,6 @@ export default class BootScene extends Phaser.Scene {
       AVATARES.forEach((key) => crearAnimacionesCaminata(this, key));
     });
 
-    Promise.all([assetsListos, fuenteLista]).then(() => this.scene.start(SCENE_KEYS.WORLD));
+    Promise.all([assetsListos, fuenteLista]).then(() => this.scene.start(SCENE_KEYS.TITLE));
   }
 }

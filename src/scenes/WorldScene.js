@@ -4,6 +4,7 @@ import { TILESET_KEY, NPC_KEY, CARTEL_KEY } from '../systems/placeholders.js';
 import GridMovement, { DIRS } from '../systems/GridMovement.js';
 import { MAPAS } from '../data/maps.js';
 import { getContenido } from '../data/content.js';
+import { entrarConFundido } from '../systems/transiciones.js';
 
 const SPAWN = { tileX: 10, tileY: 8 };
 const AVATAR_DEFAULT = 'rover_m';
@@ -15,6 +16,7 @@ export default class WorldScene extends Phaser.Scene {
   }
 
   create() {
+    entrarConFundido(this);
     this.mapa = this.make.tilemap({ key: MAPAS.PRUEBA.key });
     const tileset = this.mapa.addTilesetImage('placeholder', TILESET_KEY);
 
