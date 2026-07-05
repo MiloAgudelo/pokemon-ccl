@@ -194,7 +194,7 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - [x] Fase 1 — Movimiento y colisión _(2026-07-04, Checkpoint 1 ✔)_
 - [x] Fase 2 — Diálogo y contenido _(2026-07-04)_
 - [x] Fase 3 — Flujo de entrada _(2026-07-04, Checkpoint 2 ✔)_
-- [ ] Fase 4 — Mapa real
+- [x] Fase 4 — Mapa real _(2026-07-05, borrador programático; hitos de Cali pendientes de [MILO])_
 - [ ] Fase 5 — Progresión
 - [ ] Fase 6 — Móvil y pulido
 - [ ] Fase 7 — Despliegue
@@ -237,5 +237,10 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - Fuentes de assets de alta calidad identificadas para Fase 4: `KlaasNe/randemon` (tilesets FRLG en grilla uniforme: nature, path, water, houses, fences, hills, npc) y `pret/pokefirered` (decomp con TODOS los sprites overworld individuales limpios, 4-bit indexed).
 
 **Avance Fase 4 (2026-07-04, tarea [MILO] delegada a Claude)** — Tilesets FRLG descargados de The Spriters Resource y verificados visualmente. En `/assets/tilesets/frlg/`: `tileset_2.png` (exteriores: pasto, agua, árboles, caminos, rocas — el principal para el mapa), `tileset_1.png` (edificios urbanos), `edificios.png` (edificios con nombre: lab de Oak, Centro Pokémon, gimnasio, casas), `tileset_general.png` (árboles/flores/edificios, fondo magenta a limpiar), `tiles_animados.png` (agua/flores/fuente). En `/assets/sprites/fuentes/`: `frlg_jugadores_red_leaf.png` (Red y Leaf overworld, frames de caminata 4 direcciones — materia prima para el recolor scout) y `frlg_npcs_overworld.png` (NPCs overworld, incluye a Oak para recortar). **Ojo**: son hojas de sprites con espaciado mixto y fondos de color, no tilesets listos para Tiled; el recorte/reorganización a grilla 16×16 con transparencia es parte de la Fase 4.
+
+**Fase 4 (2026-07-05)** — Completada como borrador programático navegable. Mapa del Liceo Quial 60×40 (`src/data/map_liceo.json`) generado por `tools/generar_mapa_liceo.mjs` (determinista — se corre de nuevo tras cada ajuste): entrada sur con portería, plaza central, edificio principal (colegio FRLG), 6 casas-gimnasio, comedor, tienda de equipamiento, zona de campamento (suelo arena), zona Acción Humanitaria (edificio de banderas rojas + suelo cálido), río con puente de piedra hacia la zona Cali (Noche Cultural + Hall of Fame entre flores), borde de arbustos con hilera de árboles. **Los 13 puntos de contenido de la Ayuda ubicados** + 6 puertas de gimnasio (hoy todas abren la pantalla 6; la Fase 5 les asigna contenido/insignia individual). Colisiones horneadas por el generador (edificios, río, árboles) y validación de accesibilidad de cada punto. Tileset ampliado a 12 tiles (+flores, piedra, arena) y edificios recortados de randemon en `/assets/tilesets/edificios/` (drop-in reemplazable, con placeholder de rectángulo si falta el PNG). `tools/pixelate.py` implementado y probado (en esta máquina se corre con `py -3`; requiere Pillow, ya instalado). Decisiones tomadas por defecto (revisables por Milo):
+- Layout **estilizado/libre**, no réplica del Liceo real. Se refina editando el generador o el JSON en Tiled.
+- **Sin interiores**: todo el contenido en exteriores (menos escenas, más exploración continua).
+- Pendiente [MILO] para cerrar Fase 4 del todo: ilustraciones IA de los hitos de Cali (Cristo Rey, Torre de Cali, Gato del Río) para pasar por `pixelate.py` y colocar en la zona Cali; el generador ya deja el espacio (este del río).
 
 - **Deuda técnica** (hallazgos menores 7-9, atender a más tardar en Fase 5): (7) `WorldScene` — ternario textura-por-tipo → tabla declarativa cuando la Fase 4 agregue tipos ("zona" hoy cae en NPC por el else); (8) `TitleScene` usa `getContenido('portada')` sin guard contra null — agregar `getContenidoRequerido` que falle con mensaje claro para entradas tipo "sistema"; (9) paleta de colores (`#88a0b8`, `#f8d048`) y timers de parpadeo duplicados → `PALETA` en config + helper `parpadear` cuando la Fase 5 construya el HUD.
