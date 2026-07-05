@@ -6,9 +6,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: fit-content; /* [CCL] antes: 100% */
-  height: fit-content; /* [CCL] antes: 100% */
-  border-radius: 20px;
+  width: 100vw; /* [CCL] la consola ocupa toda la pantalla */
+  height: 100vh; /* [CCL] */
+  border-radius: 0; /* [CCL] sin esquinas que dejen ver fondo negro */
   padding: 20px;
   background-color: #4f50db;
   box-shadow: 0px -5px 0px #0d0e51, 0px 5px 0px #3d38b5;
@@ -38,7 +38,9 @@
 }
 
 .gameboy .display-section {
-  width: fit-content; /* [CCL] antes: 100%; min-height: 250px */
+  width: 100%;
+  flex: 1; /* [CCL] la pantalla se queda con todo el alto disponible */
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -54,8 +56,11 @@
 
 .gameboy .screen-area {
   position: relative;
-  width: fit-content; /* [CCL] */
-  padding: 35px 50px 5px 50px;
+  flex: 1; /* [CCL] */
+  min-height: 0; /* [CCL] */
+  display: flex; /* [CCL] */
+  flex-direction: column; /* [CCL] */
+  padding: 18px 46px 5px 46px; /* [CCL] antes: 35px 50px 5px */
   border-radius: 15px 15px 15px 15px;
   background-color: #23252d;
   color: #67879a;
@@ -127,13 +132,17 @@
 }
 .gameboy .screen-area .display {
   position: relative;
-  background-color: black;
-  width: fit-content; /* [CCL] antes: 100%; height: 190px */
-  height: fit-content;
+  background-color: #101018; /* [CCL] bisel de LCD apagado, no negro puro */
+  width: 100%;
+  flex: 1; /* [CCL] antes: height 190px — ahora todo el alto disponible */
+  min-height: 0;
   border-radius: 3px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   overflow: hidden;
   line-height: 0; /* [CCL] sin hueco bajo el canvas */
+  display: flex; /* [CCL] canvas centrado en la pantalla */
+  align-items: center;
+  justify-content: center;
 }
 .gameboy .screen-area .label {
   position: relative;
@@ -193,7 +202,7 @@
   margin: 0 auto;
   border: 2px solid #3436bf;
   border-radius: 11px;
-  margin-top: 30px;
+  margin-top: 8px; /* [CCL] antes: 30px — espacio para la pantalla */
   text-shadow: 0px -2px 1px #6b67ed;
   box-shadow: 0px -2px 1px #6b67ed;
   font-size: 16px;
@@ -470,12 +479,12 @@ body {
 }
 
 body {
-  padding: 30px;
+  padding: 0; /* [CCL] antes: 30px — sin marco negro alrededor */
   display: flex;
   justify-content: center;
   align-items: center;
-  background: black;
-  overflow: hidden; /* [CCL] la escala fraccional no debe generar scroll */
+  background: #3d38b5; /* [CCL] antes: black — tono de la carcasa */
+  overflow: hidden; /* [CCL] sin scroll */
 }
 
 .gameboy {

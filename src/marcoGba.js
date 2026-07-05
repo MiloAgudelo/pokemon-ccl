@@ -22,46 +22,27 @@ function despachar(tipo, code) {
   );
 }
 
-// Escalado responsivo (Fase 6): zoom entero mientras el conjunto marco+canvas
-// quepa en la ventana; si ni con zoom 1 cabe (celulares <480px), escala
-// fraccional CSS sobre toda la carcasa (transform preserva el pixelado).
-// El espacio del marco se MIDE del DOM real — cambia por breakpoint.
+// Escalado responsivo: la carcasa ocupa el 100% del viewport (CSS) y el
+// canvas se estira con zoom FLOTANTE hasta llenar la pantalla del marco
+// (medida real del DOM), conservando la proporción 3:2. `image-rendering:
+// pixelated` mantiene el píxel nítido aunque el zoom no sea entero.
 export function ajustarEscalaConsola(juego, anchoJuego, altoJuego) {
-  const carcasa = document.querySelector('.gameboy');
-  if (!carcasa) return;
+  const pantalla = document.querySelector('.display');
+  if (!pantalla) return;
 
   const aplicar = () => {
-    // Ventana sin dimensiones (pestaña minimizada/oculta): no hay nada que
-    // calcular; se reintenta en el próximo resize.
-    if (window.innerWidth < 50 || window.innerHeight < 50) return;
+    const ancho = pantalla.clientWidth;
+    const alto = pantalla.clientHeight;
+    // Sin dimensiones (pestaña oculta/minimizada): reintenta al redimensionar.
+    if (ancho < 50 || alto < 50) return;
 
-    carcasa.style.transform = 'none';
-    const canvas = juego.canvas;
-    const margen = 16;
-    const cromoX = carcasa.offsetWidth - canvas.offsetWidth;
-    const cromoY = carcasa.offsetHeight - canvas.offsetHeight;
-    const zoom = Math.max(
-      1,
-      Math.min(
-        Math.floor((window.innerWidth - cromoX - margen) / anchoJuego),
-        Math.floor((window.innerHeight - cromoY - margen) / altoJuego)
-      )
-    );
-    juego.scale.setZoom(zoom);
-
-    // Con el zoom ya aplicado al layout, si aún no cabe: escala fraccional.
-    setTimeout(() => {
-      const factor = Math.min(
-        1,
-        (window.innerWidth - 8) / carcasa.offsetWidth,
-        (window.innerHeight - 8) / carcasa.offsetHeight
-      );
-      carcasa.style.transform = factor < 1 ? `scale(${Math.max(factor, 0.1)})` : 'none';
-    }, 0);
+    const zoom = Math.max(0.25, Math.min(ancho / anchoJuego, alto / altoJuego));
+    juego.scale.setZoom(Math.floor(zoom * 100) / 100);
   };
 
   aplicar();
   window.addEventListener('resize', aplicar);
+  new ResizeObserver(aplicar).observe(pantalla);
 }
 
 export function conectarMarcoGba() {
