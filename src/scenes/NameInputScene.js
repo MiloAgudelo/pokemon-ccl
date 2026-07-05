@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { guardarLocal, leerLocal } from '../systems/almacen.js';
-import { FONDO_MENU_KEY } from '../systems/placeholders.js';
+import { ponerFondoMenu } from '../systems/placeholders.js';
 
 const LARGO_MAX = 10;
 
@@ -17,7 +17,7 @@ export default class NameInputScene extends Phaser.Scene {
     const W = this.scale.width;
     const H = this.scale.height;
     entrarConFundido(this);
-    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0).setDisplaySize(W, H);
+    ponerFondoMenu(this);
 
     this.add
       .text(W / 2, H * 0.3, '¿Cuál es tu nombre, entrenador?', {

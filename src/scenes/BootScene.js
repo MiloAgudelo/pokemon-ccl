@@ -62,6 +62,13 @@ const ASSETS_MILO = [
     tipo: 'image',
     crearPlaceholder: (scene) => createNpcTexture(scene),
   },
+  {
+    // Fondo de menús: pixel art de Cali [MILO]; placeholder = degradado azul.
+    key: FONDO_MENU_KEY,
+    url: '/ui/fondo_menu.png',
+    tipo: 'image',
+    crearPlaceholder: (scene) => createMenuBackgroundTexture(scene, GAME_WIDTH, GAME_HEIGHT),
+  },
   // Edificios y decoraciones grandes del catálogo (placeholder: rectángulo).
   ...Object.entries(EDIFICIOS).map(([clave, info]) => ({
     key: clave,
@@ -90,11 +97,9 @@ export default class BootScene extends Phaser.Scene {
     }
 
     iniciarInsignias(this.registry);
-    createMenuBackgroundTexture(this, GAME_WIDTH, GAME_HEIGHT);
-    this.add
-      .image(0, 0, FONDO_MENU_KEY)
-      .setOrigin(0)
-      .setDisplaySize(this.scale.width, this.scale.height);
+    // Loading screen instantáneo: color sólido (el fondo real se carga con el
+    // resto de assets y lo usan las escenas de menú, no esta pantalla fugaz).
+    this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x1c2c54).setOrigin(0);
     this.add
       .text(this.scale.width / 2, this.scale.height / 2, 'CCL 2026', {
         ...TEXT_STYLE,

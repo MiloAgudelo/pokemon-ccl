@@ -3,7 +3,7 @@ import { TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { guardarLocal, leerLocal } from '../systems/almacen.js';
 import { alPresionarAccion } from '../systems/controles.js';
-import { FONDO_MENU_KEY } from '../systems/placeholders.js';
+import { ponerFondoMenu } from '../systems/placeholders.js';
 
 const OPCIONES = [
   { key: 'rover_m', etiqueta: 'ROVER' },
@@ -27,7 +27,7 @@ export default class AvatarSelectScene extends Phaser.Scene {
     this.spriteY = spriteY;
 
     entrarConFundido(this);
-    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0).setDisplaySize(W, H);
+    ponerFondoMenu(this);
 
     this.add.text(W / 2, H * 0.15, 'Elige tu Rover', TEXT_STYLE).setOrigin(0.5);
 

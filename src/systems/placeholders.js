@@ -121,6 +121,26 @@ export function createMenuBackgroundTexture(scene, ancho, alto) {
   canvas.refresh();
 }
 
+// Coloca el fondo de menú llenando la pantalla con escalado "cover" (escala
+// uniforme + recorte de sobras), no estiramiento: así el pixel art de Cali
+// [MILO] conserva su proporción en cualquier resolución líquida. Se reajusta
+// si la pantalla cambia de tamaño mientras el menú está visible.
+export function ponerFondoMenu(scene) {
+  const fondo = scene.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0.5).setDepth(-10);
+  const fuente = scene.textures.get(FONDO_MENU_KEY).getSourceImage();
+
+  const ajustar = () => {
+    const W = scene.scale.width;
+    const H = scene.scale.height;
+    fondo.setPosition(W / 2, H / 2);
+    fondo.setScale(Math.max(W / fuente.width, H / fuente.height));
+  };
+  ajustar();
+  scene.scale.on('resize', ajustar);
+  scene.events.once('shutdown', () => scene.scale.off('resize', ajustar));
+  return fondo;
+}
+
 // Profesor Oak placeholder: bata blanca, pelo gris, 24×32.
 export function createOakTexture(scene) {
   if (scene.textures.exists(OAK_KEY)) return;

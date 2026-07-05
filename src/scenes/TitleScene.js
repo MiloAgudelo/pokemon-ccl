@@ -4,9 +4,9 @@ import { getContenido, getContenidoRequerido } from '../data/content.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import {
   LOGO_KEY,
-  FONDO_MENU_KEY,
   POKEBOLA_KEY,
   createPokebolaTexture,
+  ponerFondoMenu,
 } from '../systems/placeholders.js';
 import { alPresionarAccion } from '../systems/controles.js';
 import { reproducirMusica } from '../systems/musica.js';
@@ -22,7 +22,7 @@ export default class TitleScene extends Phaser.Scene {
     const H = this.scale.height;
     entrarConFundido(this);
     reproducirMusica(this, 'titulo');
-    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0).setDisplaySize(W, H);
+    ponerFondoMenu(this);
     this.add
       .text(W - 8, 8, 'M: música', { ...TEXT_STYLE, color: PALETA.pista })
       .setOrigin(1, 0);
