@@ -67,25 +67,26 @@ export default class WorldScene extends Phaser.Scene {
 
   // Contador de insignias fijo en la esquina superior izquierda.
   crearHudInsignias() {
-    const fondo = this.add
-      .rectangle(4, 4, 136, 16, PALETA.cajaFondo, 0.85)
-      .setOrigin(0, 0)
-      .setStrokeStyle(1, PALETA.cajaBorde)
-      .setScrollFactor(0)
-      .setDepth(10000);
     this.hudInsignias = this.add
       .text(10, 8, '', TEXT_STYLE)
       .setScrollFactor(0)
       .setDepth(10001);
     this.actualizarHud();
 
+    // Fondo opaco creado ya con el tamaño del texto (el conteo no cambia de
+    // ancho: "INSIGNIAS n/7" mide lo mismo con cualquier n).
+    this.add
+      .rectangle(4, 4, this.hudInsignias.width + 12, 16, PALETA.cajaFondo)
+      .setOrigin(0, 0)
+      .setStrokeStyle(1, PALETA.cajaBorde)
+      .setScrollFactor(0)
+      .setDepth(10000);
+
     const alCambiar = () => this.actualizarHud();
     this.registry.events.on(`changedata-${REGISTRY_KEYS.INSIGNIAS}`, alCambiar);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.registry.events.off(`changedata-${REGISTRY_KEYS.INSIGNIAS}`, alCambiar);
     });
-    // ancho del fondo ajustado al texto
-    fondo.width = this.hudInsignias.width + 12;
   }
 
   actualizarHud() {
