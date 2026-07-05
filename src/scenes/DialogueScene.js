@@ -3,12 +3,13 @@ import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '
 import { getContenido, interpolar } from '../data/content.js';
 import { alPresionarAccion } from '../systems/controles.js';
 
-const MARGEN = 4;
-const ALTO_CAJA = 46;
-const RELLENO = 6;
-const ALTO_TITULO = 14;
-const LINEAS_POR_PAGINA = 3;
-const MS_POR_LETRA = 30;
+const MARGEN = 6;
+const ALTO_CAJA = 72;
+const RELLENO = 8;
+const ALTO_TITULO = 18;
+const LINEAS_POR_PAGINA = 4;
+const INTERLINEADO = 6;
+const MS_POR_LETRA = 15;
 const NOMBRE_DEFAULT = 'ROVER';
 
 // Cuadro de diálogo estilo GBA: caja inferior, texto letra por letra,
@@ -50,13 +51,13 @@ export default class DialogueScene extends Phaser.Scene {
         .rectangle(MARGEN, cajaY - ALTO_TITULO + 1, anchoTitulo, ALTO_TITULO, 0x203048)
         .setOrigin(0, 0)
         .setStrokeStyle(1, 0xf8f8f8);
-      this.add.text(MARGEN + RELLENO, cajaY - ALTO_TITULO + 4, entrada.titulo, TEXT_STYLE);
+      this.add.text(MARGEN + RELLENO, cajaY - ALTO_TITULO + 6, entrada.titulo, TEXT_STYLE);
     }
 
     this.texto = this.add.text(MARGEN + RELLENO, cajaY + RELLENO, '', {
       ...TEXT_STYLE,
       wordWrap: { width: anchoCaja - RELLENO * 2 },
-      lineSpacing: 4,
+      lineSpacing: INTERLINEADO,
     });
 
     // Indicador de "presiona para avanzar": triángulo que parpadea
@@ -78,6 +79,13 @@ export default class DialogueScene extends Phaser.Scene {
     this.mostrarPagina();
 
     alPresionarAccion(this, () => this.avanzar());
+    // B también avanza (como en Pokémon); ESC/Select salta el diálogo entero.
+    this.input.keyboard.on('keydown-X', (e) => {
+      if (!e.repeat) this.avanzar();
+    });
+    this.input.keyboard.on('keydown-ESC', (e) => {
+      if (!e.repeat) this.cerrar();
+    });
   }
 
   // Divide los párrafos del contenido en páginas que caben en la caja, usando

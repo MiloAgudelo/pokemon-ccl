@@ -7,7 +7,7 @@ import { getContenido } from '../data/content.js';
 import { entrarConFundido } from '../systems/transiciones.js';
 import { TECLAS_ACCION } from '../systems/controles.js';
 
-const SPAWN = { tileX: 10, tileY: 8 };
+const SPAWN = { tileX: 20, tileY: 13 };
 const AVATAR_DEFAULT = 'rover_m';
 
 // Escena principal de exploración: tilemap + jugador + NPCs interactivos + cámara.

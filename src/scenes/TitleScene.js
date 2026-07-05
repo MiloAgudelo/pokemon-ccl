@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, TEXT_STYLE, SCENE_KEYS } from '../config.js';
+import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS } from '../config.js';
 import { getContenido } from '../data/content.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { LOGO_KEY, FONDO_MENU_KEY } from '../systems/placeholders.js';
@@ -17,23 +17,28 @@ export default class TitleScene extends Phaser.Scene {
     const portada = getContenido('portada');
 
     if (this.textures.exists(LOGO_KEY)) {
-      this.add.image(GAME_WIDTH / 2, 58, LOGO_KEY);
+      this.add.image(GAME_WIDTH / 2, GAME_HEIGHT * 0.36, LOGO_KEY);
     } else {
       // Placeholder [MILO]: el logo pixel art llegará a /assets/ui/logo_ccl.png.
       this.add
-        .text(GAME_WIDTH / 2, 44, portada.titulo, { ...TEXT_STYLE, fontSize: '16px' })
+        .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.28, portada.titulo, { ...TEXT_STYLE, fontSize: '24px' })
         .setOrigin(0.5);
       this.add
-        .text(GAME_WIDTH / 2, 68, portada.subtitulo, { ...TEXT_STYLE, color: '#f8d048' })
+        .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.42, portada.subtitulo, {
+          ...TEXT_STYLE,
+          fontSize: '16px',
+          color: '#f8d048',
+        })
         .setOrigin(0.5);
     }
 
+    const promptY = GAME_HEIGHT * 0.72;
     const prompt = this.add
-      .text(GAME_WIDTH / 2 + 6, 118, portada.prompt, TEXT_STYLE)
+      .text(GAME_WIDTH / 2 + 6, promptY, portada.prompt, TEXT_STYLE)
       .setOrigin(0.5);
     const flecha = this.add.triangle(
       prompt.x - prompt.width / 2 - 10,
-      118,
+      promptY,
       0, 0, 0, 6, 5, 3,
       0xf8f8f8
     );

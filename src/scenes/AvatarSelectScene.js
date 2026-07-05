@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
+import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { guardarLocal, leerLocal } from '../systems/almacen.js';
 import { alPresionarAccion } from '../systems/controles.js';
@@ -10,8 +10,9 @@ const OPCIONES = [
   { key: 'rover_f', etiqueta: 'ROVER' },
 ];
 const NOMBRES = ['HOMBRE', 'MUJER'];
-const POSICIONES_X = [80, 160];
-const SPRITE_Y = 84;
+const POSICIONES_X = [GAME_WIDTH / 3, (GAME_WIDTH / 3) * 2];
+const SPRITE_Y = GAME_HEIGHT * 0.55;
+const ESCALA_SPRITE = 3;
 
 // Selección de avatar: dos Rovers lado a lado, flechas para elegir, acción
 // para confirmar.
@@ -24,17 +25,20 @@ export default class AvatarSelectScene extends Phaser.Scene {
     entrarConFundido(this);
     this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
 
-    this.add.text(GAME_WIDTH / 2, 24, 'Elige tu Rover', TEXT_STYLE).setOrigin(0.5);
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT * 0.15, 'Elige tu Rover', TEXT_STYLE).setOrigin(0.5);
 
     OPCIONES.forEach((opcion, i) => {
-      this.add.sprite(POSICIONES_X[i], SPRITE_Y, opcion.key, 0).setOrigin(0.5, 1).setScale(2);
       this.add
-        .text(POSICIONES_X[i], SPRITE_Y + 10, NOMBRES[i], { ...TEXT_STYLE, color: '#88a0b8' })
+        .sprite(POSICIONES_X[i], SPRITE_Y, opcion.key, 0)
+        .setOrigin(0.5, 1)
+        .setScale(ESCALA_SPRITE);
+      this.add
+        .text(POSICIONES_X[i], SPRITE_Y + 14, NOMBRES[i], { ...TEXT_STYLE, color: '#88a0b8' })
         .setOrigin(0.5);
     });
 
     this.marco = this.add
-      .rectangle(POSICIONES_X[0], SPRITE_Y - 33, 46, 78)
+      .rectangle(POSICIONES_X[0], SPRITE_Y - (32 * ESCALA_SPRITE) / 2, 16 * ESCALA_SPRITE + 12, 32 * ESCALA_SPRITE + 14)
       .setStrokeStyle(1, 0xf8d048);
 
     const guardado = OPCIONES.findIndex((o) => o.key === leerLocal(REGISTRY_KEYS.AVATAR));
@@ -42,7 +46,10 @@ export default class AvatarSelectScene extends Phaser.Scene {
     this.actualizarMarco();
 
     this.add
-      .text(GAME_WIDTH / 2, 140, 'Z/ENTER para confirmar', { ...TEXT_STYLE, color: '#88a0b8' })
+      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.88, 'A/Z/ENTER para confirmar', {
+        ...TEXT_STYLE,
+        color: '#88a0b8',
+      })
       .setOrigin(0.5);
 
     ['keydown-LEFT', 'keydown-A'].forEach((ev) => this.input.keyboard.on(ev, () => this.mover(-1)));

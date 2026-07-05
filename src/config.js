@@ -1,8 +1,10 @@
-// Constantes globales del juego. Resolución GBA real con zoom entero (regla del stack).
+// Constantes globales del juego.
+// Resolución interna 480×320 (2× GBA): decisión de Milo (2026-07-04) para ver
+// más mundo y texto proporcionalmente más pequeño. El zoom físico es entero y
+// responsivo (se calcula en main.js según el tamaño de la ventana).
 
-export const GAME_WIDTH = 240;
-export const GAME_HEIGHT = 160;
-export const ZOOM = 3;
+export const GAME_WIDTH = 480;
+export const GAME_HEIGHT = 320;
 export const TILE_SIZE = 16;
 
 export const FONT_FAMILY = '"Press Start 2P"';
