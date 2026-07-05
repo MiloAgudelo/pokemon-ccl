@@ -25,6 +25,10 @@ const TILE_COLORS = [
   { base: '#58a858', detalle: '#487848' }, // 5: pasto con matas B
   { base: '#4890d8', detalle: '#3878b8' }, // 6: agua variante
   { base: '#b8b0a0', detalle: '#c8c0b0' }, // 7: camino (dup)
+  { base: '#58a858', detalle: '#d86060' }, // 8: flores
+  { base: '#989088', detalle: '#a8a098' }, // 9: piedra
+  { base: '#e0d090', detalle: '#d0c080' }, // 10: arena
+  { base: '#58a858', detalle: '#68b868' }, // 11: reserva (pasto)
 ];
 const TILESET_COLUMNAS = 4;
 
@@ -51,6 +55,20 @@ export function createTilesetTexture(scene) {
     ctx.fillRect(x + 10, y + 9, 2, 2);
   });
 
+  canvas.refresh();
+}
+
+// Rectángulo de color con borde: placeholder genérico para edificios
+// decorativos cuyo PNG real aún no está en /assets/tilesets/edificios/.
+export function createRectanguloTexture(scene, key, ancho, alto, color) {
+  if (scene.textures.exists(key)) return;
+
+  const canvas = scene.textures.createCanvas(key, ancho, alto);
+  const ctx = canvas.getContext();
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, ancho, alto);
+  ctx.strokeStyle = '#f8f8f8';
+  ctx.strokeRect(0.5, 0.5, ancho - 1, alto - 1);
   canvas.refresh();
 }
 
