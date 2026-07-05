@@ -7,12 +7,14 @@ import {
   createCartelTexture,
   createOakTexture,
   createMenuBackgroundTexture,
+  createRectanguloTexture,
   OAK_KEY,
   LOGO_KEY,
   TILESET_KEY,
   NPC_KEY,
   FONDO_MENU_KEY,
 } from '../systems/placeholders.js';
+import { EDIFICIOS, urlEdificio } from '../data/edificios.js';
 import { cargarAssetsConPlaceholder } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
 import { cargarMusica } from '../systems/musica.js';
@@ -59,6 +61,14 @@ const ASSETS_MILO = [
     tipo: 'image',
     crearPlaceholder: (scene) => createNpcTexture(scene),
   },
+  // Edificios y decoraciones grandes del catálogo (placeholder: rectángulo).
+  ...Object.entries(EDIFICIOS).map(([clave, info]) => ({
+    key: clave,
+    url: urlEdificio(clave),
+    tipo: 'image',
+    crearPlaceholder: (scene) =>
+      createRectanguloTexture(scene, clave, info.ancho, info.alto, info.colorPlaceholder),
+  })),
 ];
 
 const AVATARES = ['rover_m', 'rover_f'];

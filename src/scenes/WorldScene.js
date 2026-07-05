@@ -8,7 +8,7 @@ import { entrarConFundido } from '../systems/transiciones.js';
 import { TECLAS_ACCION } from '../systems/controles.js';
 import { reproducirMusica } from '../systems/musica.js';
 
-const SPAWN = { tileX: 20, tileY: 13 };
+const SPAWN = { tileX: 29, tileY: 36 };
 const AVATAR_DEFAULT = 'rover_m';
 
 // Escena principal de exploración: tilemap + jugador + NPCs interactivos + cámara.
@@ -20,12 +20,13 @@ export default class WorldScene extends Phaser.Scene {
   create() {
     entrarConFundido(this);
     reproducirMusica(this, 'mapa');
-    this.mapa = this.make.tilemap({ key: MAPAS.PRUEBA.key });
+    this.mapa = this.make.tilemap({ key: MAPAS.LICEO.key });
     const tileset = this.mapa.addTilesetImage('placeholder', TILESET_KEY);
 
     this.mapa.createLayer('suelo', tileset, 0, 0);
     this.colision = this.mapa.createLayer('colision', tileset, 0, 0).setVisible(false);
 
+    this.crearEdificios();
     this.crearObjetosInteractivos();
 
     // El avatar lo fija la selección de personaje (Fase 3); mientras tanto, default.
@@ -44,6 +45,22 @@ export default class WorldScene extends Phaser.Scene {
     this.teclasAccion = TECLAS_ACCION.map((tecla) =>
       this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[tecla])
     );
+  }
+
+  // Edificios y decoraciones grandes: imágenes sobre el tilemap (la colisión
+  // de su huella ya viene horneada en la capa `colision` por el generador).
+  crearEdificios() {
+    const capa = this.mapa.getObjectLayer('edificios');
+    if (!capa) return;
+
+    capa.objects.forEach((obj) => {
+      const prop = (obj.properties || []).find((p) => p.name === 'imagen');
+      if (!prop || !this.textures.exists(prop.value)) return;
+      this.add
+        .image(obj.x, obj.y, prop.value)
+        .setOrigin(0, 0)
+        .setDepth(obj.y + obj.height);
+    });
   }
 
   // Lee la capa de objetos del mapa: cada objeto con content_id se vuelve un
