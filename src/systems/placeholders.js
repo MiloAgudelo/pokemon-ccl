@@ -11,6 +11,7 @@ export const CARTEL_KEY = 'cartel_placeholder';
 // tanto si se cargó el PNG real como si se generó por código.
 export const OAK_KEY = 'oak';
 export const LOGO_KEY = 'logo_ccl';
+export const FONDO_MENU_KEY = 'fondo_menu';
 
 // Índices de tile dentro del tileset placeholder (gid = índice + 1 en Tiled).
 const TILE_COLORS = [
@@ -36,6 +37,33 @@ export function createTilesetTexture(scene) {
     ctx.fillRect(x + 3, 3, 2, 2);
     ctx.fillRect(x + 10, 9, 2, 2);
   });
+
+  canvas.refresh();
+}
+
+// Fondo de las pantallas de menú (title, nombre, avatar, intro): degradado
+// azul en bandas con puntoado sutil, al estilo de los menús GBA. 240×160.
+export function createMenuBackgroundTexture(scene, ancho, alto) {
+  if (scene.textures.exists(FONDO_MENU_KEY)) return;
+
+  const canvas = scene.textures.createCanvas(FONDO_MENU_KEY, ancho, alto);
+  const ctx = canvas.getContext();
+
+  const bandas = ['#2c4c80', '#284478', '#243c6c', '#203460', '#1c2c54'];
+  const altoBanda = Math.ceil(alto / bandas.length);
+  bandas.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, i * altoBanda, ancho, altoBanda);
+  });
+
+  // Puntos 2×2 en grilla alternada, apenas visibles.
+  ctx.fillStyle = 'rgba(248, 248, 248, 0.06)';
+  for (let y = 4; y < alto; y += 12) {
+    const desfase = (y / 12) % 2 === 0 ? 0 : 8;
+    for (let x = desfase; x < ancho; x += 16) {
+      ctx.fillRect(x, y, 2, 2);
+    }
+  }
 
   canvas.refresh();
 }

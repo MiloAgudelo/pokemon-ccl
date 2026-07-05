@@ -10,7 +10,7 @@ import DialogueScene from './scenes/DialogueScene.js';
 
 const juego = new Phaser.Game({
   type: Phaser.AUTO,
-  parent: 'juego',
+  parent: 'consola',
   width: GAME_WIDTH,
   height: GAME_HEIGHT,
   zoom: ZOOM,

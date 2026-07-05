@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { guardarLocal, leerLocal } from '../systems/almacen.js';
+import { FONDO_MENU_KEY } from '../systems/placeholders.js';
 
 const LARGO_MAX = 10;
 
@@ -14,6 +15,7 @@ export default class NameInputScene extends Phaser.Scene {
 
   create() {
     entrarConFundido(this);
+    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
 
     this.add
       .text(GAME_WIDTH / 2, 44, '¿Cuál es tu nombre,', TEXT_STYLE)

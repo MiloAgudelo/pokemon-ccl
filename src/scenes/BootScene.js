@@ -6,8 +6,10 @@ import {
   createNpcTexture,
   createCartelTexture,
   createOakTexture,
+  createMenuBackgroundTexture,
   OAK_KEY,
   LOGO_KEY,
+  FONDO_MENU_KEY,
 } from '../systems/placeholders.js';
 import { cargarAssetsConPlaceholder } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
@@ -54,6 +56,15 @@ export default class BootScene extends Phaser.Scene {
   }
 
   create() {
+    // Ancla el overlay DOM de Phaser (input de nombre) a la esquina del
+    // canvas: comparten el wrapper #consola como referencia de posición.
+    if (this.game.domContainer) {
+      this.game.domContainer.style.left = '0px';
+      this.game.domContainer.style.top = '0px';
+    }
+
+    createMenuBackgroundTexture(this, GAME_WIDTH, GAME_HEIGHT);
+    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
     this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'CCL 2026', { ...TEXT_STYLE, fontSize: '16px' })
       .setOrigin(0.5);

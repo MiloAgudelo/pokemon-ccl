@@ -24,13 +24,20 @@
         justify-content: center;
         height: 100%;
       }
+      /* Wrapper del tamaño exacto del canvas: referencia de posición para el
+         overlay DOM de Phaser (input de nombre) y, en Fase 6, para el marco
+         de consola GBA. */
+      #consola {
+        position: relative;
+      }
       canvas {
+        display: block;
         image-rendering: pixelated;
       }
     </style>
   </head>
   <body>
-    <div id="juego"></div>
+    <div id="juego"><div id="consola"></div></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
