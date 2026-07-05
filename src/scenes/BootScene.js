@@ -9,6 +9,8 @@ import {
   createMenuBackgroundTexture,
   OAK_KEY,
   LOGO_KEY,
+  TILESET_KEY,
+  NPC_KEY,
   FONDO_MENU_KEY,
 } from '../systems/placeholders.js';
 import { cargarAssetsConPlaceholder } from '../systems/loader.js';
@@ -45,6 +47,18 @@ const ASSETS_MILO = [
     // Sin placeholder de textura: el title screen usa texto si no hay logo.
     crearPlaceholder: () => {},
   },
+  {
+    key: TILESET_KEY,
+    url: '/tilesets/frlg_basico.png',
+    tipo: 'image',
+    crearPlaceholder: (scene) => createTilesetTexture(scene),
+  },
+  {
+    key: NPC_KEY,
+    url: '/sprites/npc_generico.png',
+    tipo: 'image',
+    crearPlaceholder: (scene) => createNpcTexture(scene),
+  },
 ];
 
 const AVATARES = ['rover_m', 'rover_f'];
@@ -70,8 +84,6 @@ export default class BootScene extends Phaser.Scene {
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'CCL 2026', { ...TEXT_STYLE, fontSize: '16px' })
       .setOrigin(0.5);
 
-    createTilesetTexture(this);
-    createNpcTexture(this);
     createCartelTexture(this);
     Object.values(MAPAS).forEach(({ key, data }) => {
       this.cache.tilemap.add(key, { format: Phaser.Tilemaps.Formats.TILED_JSON, data });

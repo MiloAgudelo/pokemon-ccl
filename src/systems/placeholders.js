@@ -13,29 +13,42 @@ export const OAK_KEY = 'oak';
 export const LOGO_KEY = 'logo_ccl';
 export const FONDO_MENU_KEY = 'fondo_menu';
 
-// Índices de tile dentro del tileset placeholder (gid = índice + 1 en Tiled).
+// Índices de tile dentro del tileset (gid = índice + 1 en Tiled). Mismo
+// layout que el tileset real /assets/tilesets/frlg_basico.png: 4 columnas ×
+// 2 filas (base: pasto, camino, agua, arbusto; variantes decorativas abajo).
 const TILE_COLORS = [
   { base: '#58a858', detalle: '#68b868' }, // 0: pasto
   { base: '#b8b0a0', detalle: '#c8c0b0' }, // 1: camino
   { base: '#4890d8', detalle: '#60a8e8' }, // 2: agua
-  { base: '#906040', detalle: '#785038' }, // 3: muro
+  { base: '#906040', detalle: '#785038' }, // 3: muro/arbusto
+  { base: '#58a858', detalle: '#487848' }, // 4: pasto con matas A
+  { base: '#58a858', detalle: '#487848' }, // 5: pasto con matas B
+  { base: '#4890d8', detalle: '#3878b8' }, // 6: agua variante
+  { base: '#b8b0a0', detalle: '#c8c0b0' }, // 7: camino (dup)
 ];
+const TILESET_COLUMNAS = 4;
 
-// Tileset de 4 tiles sólidos 16×16 en una fila (64×16 px).
+// Tileset placeholder de tiles sólidos 16×16 (64×32 px).
 export function createTilesetTexture(scene) {
   if (scene.textures.exists(TILESET_KEY)) return;
 
-  const canvas = scene.textures.createCanvas(TILESET_KEY, TILE_COLORS.length * TILE_SIZE, TILE_SIZE);
+  const filas = Math.ceil(TILE_COLORS.length / TILESET_COLUMNAS);
+  const canvas = scene.textures.createCanvas(
+    TILESET_KEY,
+    TILESET_COLUMNAS * TILE_SIZE,
+    filas * TILE_SIZE
+  );
   const ctx = canvas.getContext();
 
   TILE_COLORS.forEach((color, i) => {
-    const x = i * TILE_SIZE;
+    const x = (i % TILESET_COLUMNAS) * TILE_SIZE;
+    const y = Math.floor(i / TILESET_COLUMNAS) * TILE_SIZE;
     ctx.fillStyle = color.base;
-    ctx.fillRect(x, 0, TILE_SIZE, TILE_SIZE);
+    ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
     // Punteado sutil para que se lea la grilla al caminar.
     ctx.fillStyle = color.detalle;
-    ctx.fillRect(x + 3, 3, 2, 2);
-    ctx.fillRect(x + 10, 9, 2, 2);
+    ctx.fillRect(x + 3, y + 3, 2, 2);
+    ctx.fillRect(x + 10, y + 9, 2, 2);
   });
 
   canvas.refresh();
