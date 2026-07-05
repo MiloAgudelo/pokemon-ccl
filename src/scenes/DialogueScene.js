@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
+import { TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS, PALETA } from '../config.js';
 import { getContenido, interpolar } from '../data/content.js';
 import { alPresionarAccion } from '../systems/controles.js';
 import { desbloquearInsignia, paginaDeObtencion } from '../systems/insignias.js';
@@ -38,8 +38,10 @@ export default class DialogueScene extends Phaser.Scene {
     }
 
     const nombre = this.registry.get(REGISTRY_KEYS.NOMBRE) || NOMBRE_DEFAULT;
-    const cajaY = GAME_HEIGHT - MARGEN - ALTO_CAJA;
-    const anchoCaja = GAME_WIDTH - MARGEN * 2;
+    const W = this.scale.width;
+    const H = this.scale.height;
+    const cajaY = H - MARGEN - ALTO_CAJA;
+    const anchoCaja = W - MARGEN * 2;
 
     // Marco placeholder: caja oscura con borde blanco simple.
     this.add
@@ -65,7 +67,7 @@ export default class DialogueScene extends Phaser.Scene {
     // Indicador de "presiona para avanzar": triángulo que parpadea
     // (dibujado, no glifo de texto — Press Start 2P no trae flechas).
     this.indicador = this.add
-      .triangle(GAME_WIDTH - MARGEN - 12, GAME_HEIGHT - MARGEN - 9, 0, 0, 6, 0, 3, 4, 0xf8f8f8)
+      .triangle(W - MARGEN - 12, H - MARGEN - 9, 0, 0, 6, 0, 3, 4, 0xf8f8f8)
       .setVisible(false);
     this.time.addEvent({
       delay: 400,

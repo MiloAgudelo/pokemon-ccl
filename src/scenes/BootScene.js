@@ -91,9 +91,15 @@ export default class BootScene extends Phaser.Scene {
 
     iniciarInsignias(this.registry);
     createMenuBackgroundTexture(this, GAME_WIDTH, GAME_HEIGHT);
-    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
     this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'CCL 2026', { ...TEXT_STYLE, fontSize: '16px' })
+      .image(0, 0, FONDO_MENU_KEY)
+      .setOrigin(0)
+      .setDisplaySize(this.scale.width, this.scale.height);
+    this.add
+      .text(this.scale.width / 2, this.scale.height / 2, 'CCL 2026', {
+        ...TEXT_STYLE,
+        fontSize: '16px',
+      })
       .setOrigin(0.5);
 
     createCartelTexture(this);

@@ -22,13 +22,17 @@ function despachar(tipo, code) {
   );
 }
 
-// Escalado responsivo: la carcasa ocupa el 100% del viewport (CSS) y el
-// canvas se estira con zoom FLOTANTE hasta llenar la pantalla del marco
-// (medida real del DOM), conservando la proporción 3:2. `image-rendering:
-// pixelated` mantiene el píxel nítido aunque el zoom no sea entero.
-export function ajustarEscalaConsola(juego, anchoJuego, altoJuego) {
+// Canvas "líquido": la carcasa ocupa el 100% del viewport (CSS) y el juego
+// llena la pantalla del marco SIN franjas — la resolución interna se adapta
+// a la proporción de cada pantalla (se ve más o menos mundo, nunca bandas).
+// El zoom flotante da el tamaño de píxel; las escenas leen this.scale.
+export function ajustarEscalaConsola(juego, anchoBase, altoBase) {
   const pantalla = document.querySelector('.display');
   if (!pantalla) return;
+
+  // El mapa mide 960px de ancho (map_liceo); la resolución interna no debe
+  // superarlo o la cámara se quedaría sin mundo que mostrar a los lados.
+  const ANCHO_INTERNO_MAX = 940;
 
   const aplicar = () => {
     const ancho = pantalla.clientWidth;
@@ -36,8 +40,16 @@ export function ajustarEscalaConsola(juego, anchoJuego, altoJuego) {
     // Sin dimensiones (pestaña oculta/minimizada): reintenta al redimensionar.
     if (ancho < 50 || alto < 50) return;
 
-    const zoom = Math.max(0.25, Math.min(ancho / anchoJuego, alto / altoJuego));
-    juego.scale.setZoom(Math.floor(zoom * 100) / 100);
+    // Píxel mínimo 2×2 (look GBA en celulares); en pantallas altas el alto
+    // interno se ancla a la resolución base.
+    const zoom = Math.max(2, alto / altoBase, ancho / ANCHO_INTERNO_MAX);
+    const anchoInterno = Math.max(240, Math.round(ancho / zoom));
+    const altoInterno = Math.max(160, Math.round(alto / zoom));
+
+    juego.scale.setGameSize(anchoInterno, altoInterno);
+    // Zoom final exacto para cubrir la pantalla completa: el sub-píxel que
+    // sobre lo recorta el overflow:hidden del .display — cero franjas.
+    juego.scale.setZoom(Math.max(ancho / anchoInterno, alto / altoInterno));
   };
 
   aplicar();

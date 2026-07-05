@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, PALETA } from '../config.js';
+import { TEXT_STYLE, SCENE_KEYS, PALETA } from '../config.js';
 import { getContenido, getContenidoRequerido } from '../data/content.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import {
@@ -18,23 +18,25 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   create() {
+    const W = this.scale.width;
+    const H = this.scale.height;
     entrarConFundido(this);
     reproducirMusica(this, 'titulo');
-    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
+    this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0).setDisplaySize(W, H);
     this.add
-      .text(GAME_WIDTH - 8, 8, 'M: música', { ...TEXT_STYLE, color: PALETA.pista })
+      .text(W - 8, 8, 'M: música', { ...TEXT_STYLE, color: PALETA.pista })
       .setOrigin(1, 0);
     const portada = getContenidoRequerido('portada');
 
     if (this.textures.exists(LOGO_KEY)) {
-      this.add.image(GAME_WIDTH / 2, GAME_HEIGHT * 0.36, LOGO_KEY);
+      this.add.image(W / 2, H * 0.36, LOGO_KEY);
     } else {
       // Placeholder [MILO]: el logo pixel art llegará a /assets/ui/logo_ccl.png.
       this.add
-        .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.28, portada.titulo, { ...TEXT_STYLE, fontSize: '24px' })
+        .text(W / 2, H * 0.28, portada.titulo, { ...TEXT_STYLE, fontSize: '24px' })
         .setOrigin(0.5);
       this.add
-        .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.42, portada.subtitulo, {
+        .text(W / 2, H * 0.42, portada.subtitulo, {
           ...TEXT_STYLE,
           fontSize: '16px',
           color: PALETA.acento,
@@ -42,10 +44,8 @@ export default class TitleScene extends Phaser.Scene {
         .setOrigin(0.5);
     }
 
-    const promptY = GAME_HEIGHT * 0.72;
-    const prompt = this.add
-      .text(GAME_WIDTH / 2 + 6, promptY, portada.prompt, TEXT_STYLE)
-      .setOrigin(0.5);
+    const promptY = H * 0.72;
+    const prompt = this.add.text(W / 2 + 6, promptY, portada.prompt, TEXT_STYLE).setOrigin(0.5);
     const flecha = this.add.triangle(
       prompt.x - prompt.width / 2 - 10,
       promptY,
@@ -62,16 +62,16 @@ export default class TitleScene extends Phaser.Scene {
     });
 
     alPresionarAccion(this, () => irConFundido(this, SCENE_KEYS.NAME_INPUT));
-    this.crearEasterEgg();
+    this.crearEasterEgg(H);
   }
 
   // Pokébola-QR oculta (pantalla 2 de la Ayuda): discreta en la esquina.
   // Vive en el title y no en la intro porque la intro pasa pausada bajo el
   // diálogo de Oak y no recibiría el clic (desviación anotada en el roadmap).
-  crearEasterEgg() {
+  crearEasterEgg(H) {
     createPokebolaTexture(this);
     const pokebola = this.add
-      .image(14, GAME_HEIGHT - 14, POKEBOLA_KEY)
+      .image(14, H - 14, POKEBOLA_KEY)
       .setAlpha(0.7)
       .setInteractive({ useHandCursor: true });
 

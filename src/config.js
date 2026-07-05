@@ -1,7 +1,8 @@
 // Constantes globales del juego.
-// Resolución interna 480×320 (2× GBA): decisión de Milo (2026-07-04) para ver
-// más mundo y texto proporcionalmente más pequeño. El zoom físico es entero y
-// responsivo (se calcula en main.js según el tamaño de la ventana).
+// GAME_WIDTH/HEIGHT son el tamaño BASE (arranque y texturas generadas): el
+// tamaño interno real es "líquido" — se adapta a la proporción de la pantalla
+// del marco para que nunca queden franjas (ver ajustarEscalaConsola). Las
+// escenas se maquetan leyendo this.scale.width/height, no estas constantes.
 
 export const GAME_WIDTH = 480;
 export const GAME_HEIGHT = 320;
