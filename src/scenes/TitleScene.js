@@ -32,13 +32,21 @@ export default class TitleScene extends Phaser.Scene {
       this.add.image(W / 2, H * 0.36, LOGO_KEY);
     } else {
       // Placeholder [MILO]: el logo pixel art llegará a /assets/ui/logo_ccl.png.
+      // Press Start 2P es monoespaciada (ancho de glifo = fontSize): se elige
+      // el tamaño más grande que quepa en el ancho interno de la pantalla.
+      const tamanoTitulo =
+        [24, 16, 8].find((t) => portada.titulo.length * t <= W - 16) || 8;
+      const tamanoSubtitulo = Math.max(8, tamanoTitulo - 8);
       this.add
-        .text(W / 2, H * 0.28, portada.titulo, { ...TEXT_STYLE, fontSize: '24px' })
+        .text(W / 2, H * 0.28, portada.titulo, {
+          ...TEXT_STYLE,
+          fontSize: `${tamanoTitulo}px`,
+        })
         .setOrigin(0.5);
       this.add
         .text(W / 2, H * 0.42, portada.subtitulo, {
           ...TEXT_STYLE,
-          fontSize: '16px',
+          fontSize: `${tamanoSubtitulo}px`,
           color: PALETA.acento,
         })
         .setOrigin(0.5);

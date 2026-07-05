@@ -20,7 +20,11 @@ export default class NameInputScene extends Phaser.Scene {
     this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0).setDisplaySize(W, H);
 
     this.add
-      .text(W / 2, H * 0.3, '¿Cuál es tu nombre, entrenador?', TEXT_STYLE)
+      .text(W / 2, H * 0.3, '¿Cuál es tu nombre, entrenador?', {
+        ...TEXT_STYLE,
+        align: 'center',
+        wordWrap: { width: W - 24 },
+      })
       .setOrigin(0.5);
 
     const html = `<input type="text" name="nombre" maxlength="${LARGO_MAX}" autocomplete="off"
