@@ -20,24 +20,24 @@ export default class NameInputScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.add.text(GAME_WIDTH / 2, 56, 'entrenador?', TEXT_STYLE).setOrigin(0.5);
 
-    const guardado = leerLocal('nombre') || '';
     const html = `<input type="text" name="nombre" maxlength="${LARGO_MAX}" autocomplete="off"
-      value="${guardado.replace(/"/g, '')}"
       style="width: 150px; padding: 5px 2px; font-family: 'Press Start 2P', monospace; font-size: 8px;
       background: #182838; color: #f8f8f8; border: 2px solid #f8f8f8; outline: none;
       text-transform: uppercase; text-align: center;">`;
     this.campo = this.add.dom(GAME_WIDTH / 2, 84).createFromHTML(html);
     const input = this.campo.getChildByName('nombre');
+    input.value = leerLocal(REGISTRY_KEYS.NOMBRE) || '';
     input.focus();
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') this.confirmar();
-    });
 
     this.aviso = this.add
       .text(GAME_WIDTH / 2, 118, 'ENTER para continuar', { ...TEXT_STYLE, color: '#88a0b8' })
       .setOrigin(0.5);
 
-    this.input.keyboard.on('keydown-ENTER', () => this.confirmar());
+    // El teclado de Phaser escucha en window, así que recibe el Enter aunque
+    // el foco esté en el input HTML. Solo Enter: Z/Espacio aquí son letras.
+    this.input.keyboard.on('keydown-ENTER', (e) => {
+      if (!e.repeat) this.confirmar();
+    });
   }
 
   confirmar() {
@@ -50,7 +50,7 @@ export default class NameInputScene extends Phaser.Scene {
     }
 
     this.registry.set(REGISTRY_KEYS.NOMBRE, nombre);
-    guardarLocal('nombre', nombre);
+    guardarLocal(REGISTRY_KEYS.NOMBRE, nombre);
     irConFundido(this, SCENE_KEYS.AVATAR_SELECT);
   }
 }

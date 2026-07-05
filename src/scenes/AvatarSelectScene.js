@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { guardarLocal, leerLocal } from '../systems/almacen.js';
+import { alPresionarAccion } from '../systems/controles.js';
 
 const OPCIONES = [
   { key: 'rover_m', etiqueta: 'ROVER' },
@@ -34,7 +35,7 @@ export default class AvatarSelectScene extends Phaser.Scene {
       .rectangle(POSICIONES_X[0], SPRITE_Y - 33, 46, 78)
       .setStrokeStyle(1, 0xf8d048);
 
-    const guardado = OPCIONES.findIndex((o) => o.key === leerLocal('avatar'));
+    const guardado = OPCIONES.findIndex((o) => o.key === leerLocal(REGISTRY_KEYS.AVATAR));
     this.seleccion = guardado >= 0 ? guardado : 0;
     this.actualizarMarco();
 
@@ -44,12 +45,16 @@ export default class AvatarSelectScene extends Phaser.Scene {
 
     ['keydown-LEFT', 'keydown-A'].forEach((ev) => this.input.keyboard.on(ev, () => this.mover(-1)));
     ['keydown-RIGHT', 'keydown-D'].forEach((ev) => this.input.keyboard.on(ev, () => this.mover(1)));
-    ['keydown-Z', 'keydown-ENTER', 'keydown-SPACE'].forEach((ev) =>
-      this.input.keyboard.on(ev, () => this.confirmar())
-    );
+    alPresionarAccion(this, () => this.confirmar(), { conTap: false });
+    // Tap: primero selecciona; tap sobre la opción ya seleccionada confirma.
     this.input.on('pointerdown', (puntero) => {
-      this.seleccion = puntero.worldX < GAME_WIDTH / 2 ? 0 : 1;
-      this.actualizarMarco();
+      const tocada = puntero.worldX < GAME_WIDTH / 2 ? 0 : 1;
+      if (tocada === this.seleccion) {
+        this.confirmar();
+      } else {
+        this.seleccion = tocada;
+        this.actualizarMarco();
+      }
     });
   }
 
@@ -65,7 +70,7 @@ export default class AvatarSelectScene extends Phaser.Scene {
   confirmar() {
     const avatar = OPCIONES[this.seleccion].key;
     this.registry.set(REGISTRY_KEYS.AVATAR, avatar);
-    guardarLocal('avatar', avatar);
+    guardarLocal(REGISTRY_KEYS.AVATAR, avatar);
     irConFundido(this, SCENE_KEYS.INTRO);
   }
 }

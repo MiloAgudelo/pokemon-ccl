@@ -17,7 +17,7 @@ export default class IntroScene extends Phaser.Scene {
     this.add.image(GAME_WIDTH / 2, 52, OAK_KEY).setOrigin(0.5, 0.5).setScale(2);
 
     // El diálogo (escena overlay) pausa esta escena y la reanuda al cerrar.
-    this.events.on(Phaser.Scenes.Events.RESUME, () => {
+    this.events.once(Phaser.Scenes.Events.RESUME, () => {
       irConFundido(this, SCENE_KEYS.WORLD);
     });
     this.scene.launch(SCENE_KEYS.DIALOGUE, {

@@ -5,6 +5,7 @@ import GridMovement, { DIRS } from '../systems/GridMovement.js';
 import { MAPAS } from '../data/maps.js';
 import { getContenido } from '../data/content.js';
 import { entrarConFundido } from '../systems/transiciones.js';
+import { TECLAS_ACCION } from '../systems/controles.js';
 
 const SPAWN = { tileX: 10, tileY: 8 };
 const AVATAR_DEFAULT = 'rover_m';
@@ -38,7 +39,7 @@ export default class WorldScene extends Phaser.Scene {
 
     this.cursores = this.input.keyboard.createCursorKeys();
     this.wasd = this.input.keyboard.addKeys('W,A,S,D');
-    this.teclasAccion = ['Z', 'ENTER', 'SPACE'].map((tecla) =>
+    this.teclasAccion = TECLAS_ACCION.map((tecla) =>
       this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[tecla])
     );
   }

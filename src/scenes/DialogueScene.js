@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
 import { getContenido, interpolar } from '../data/content.js';
+import { alPresionarAccion } from '../systems/controles.js';
 
 const MARGEN = 4;
 const ALTO_CAJA = 46;
@@ -76,12 +77,7 @@ export default class DialogueScene extends Phaser.Scene {
     this.tipeo = null;
     this.mostrarPagina();
 
-    ['keydown-Z', 'keydown-ENTER', 'keydown-SPACE'].forEach((evento) => {
-      this.input.keyboard.on(evento, (e) => {
-        if (!e.repeat) this.avanzar();
-      });
-    });
-    this.input.on('pointerdown', () => this.avanzar());
+    alPresionarAccion(this, () => this.avanzar());
   }
 
   // Divide los párrafos del contenido en páginas que caben en la caja, usando

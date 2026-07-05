@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS } from '../config.js';
+import { GAME_WIDTH, TEXT_STYLE, SCENE_KEYS } from '../config.js';
 import { getContenido } from '../data/content.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { LOGO_KEY } from '../systems/placeholders.js';
+import { alPresionarAccion } from '../systems/controles.js';
 
 // Title screen: logo (o texto placeholder) + "INICIAR AVENTURA" parpadeante.
 export default class TitleScene extends Phaser.Scene {
@@ -44,13 +45,6 @@ export default class TitleScene extends Phaser.Scene {
       },
     });
 
-    ['keydown-Z', 'keydown-ENTER', 'keydown-SPACE'].forEach((evento) => {
-      this.input.keyboard.on(evento, () => this.iniciar());
-    });
-    this.input.on('pointerdown', () => this.iniciar());
-  }
-
-  iniciar() {
-    irConFundido(this, SCENE_KEYS.NAME_INPUT);
+    alPresionarAccion(this, () => irConFundido(this, SCENE_KEYS.NAME_INPUT));
   }
 }
