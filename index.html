@@ -11,51 +11,6 @@
         font-weight: 400;
         src: url('/ui/fonts/PressStart2P.ttf') format('truetype');
       }
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        background: #101018;
-        height: 100%;
-        overflow: hidden;
-      }
-      #juego {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-      }
-
-      /* ===== Marco de consola GBA (horizontal) ===== */
-      .gba {
-        background: linear-gradient(160deg, #574ac2 0%, #4a3cae 55%, #3e3198 100%);
-        border-radius: 26px 26px 40px 40px;
-        box-shadow:
-          inset 0 2px 2px rgba(255, 255, 255, 0.25),
-          inset 0 -6px 10px rgba(0, 0, 0, 0.35),
-          0 18px 40px rgba(0, 0, 0, 0.55);
-        padding: 16px 14px 10px;
-        user-select: none;
-        -webkit-user-select: none;
-      }
-      .gba-cuerpo {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-      .gba-lado {
-        width: 112px;
-        display: flex;
-        justify-content: center;
-      }
-
-      /* Pantalla con bisel */
-      .gba-bisel {
-        background: #241f3d;
-        border-radius: 12px;
-        padding: 14px 14px 20px;
-        box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.6);
-      }
       /* Wrapper del tamaño exacto del canvas: referencia de posición para el
          overlay DOM de Phaser (input de nombre). */
       #consola {
@@ -65,140 +20,134 @@
       canvas {
         display: block;
         image-rendering: pixelated;
-        border-radius: 3px;
-      }
-
-      /* D-pad en cruz */
-      .dpad {
-        display: grid;
-        grid-template-columns: repeat(3, 34px);
-        grid-template-rows: repeat(3, 34px);
-      }
-      .dpad-btn {
-        appearance: none;
-        border: none;
-        background: #262239;
-        box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.12), 0 3px 4px rgba(0, 0, 0, 0.45);
-        cursor: pointer;
-        touch-action: none;
-        padding: 0;
-      }
-      .dpad-btn:active {
-        background: #1c1930;
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.6);
-      }
-      .dpad-centro {
-        background: #262239;
-      }
-      .dpad-up    { grid-area: 1 / 2; border-radius: 6px 6px 0 0; }
-      .dpad-left  { grid-area: 2 / 1; border-radius: 6px 0 0 6px; }
-      .dpad-mid   { grid-area: 2 / 2; }
-      .dpad-right { grid-area: 2 / 3; border-radius: 0 6px 6px 0; }
-      .dpad-down  { grid-area: 3 / 2; border-radius: 0 0 6px 6px; }
-
-      /* Botones A / B */
-      .ab {
-        display: flex;
-        gap: 12px;
-        transform: rotate(-22deg);
-      }
-      .btn-ab {
-        appearance: none;
-        border: none;
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        background: radial-gradient(circle at 35% 30%, #b0a4e6, #7a6ad0 70%);
-        color: #2e2564;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 13px;
-        box-shadow: inset 0 -3px 4px rgba(0, 0, 0, 0.35), 0 4px 6px rgba(0, 0, 0, 0.45);
-        cursor: pointer;
-        touch-action: none;
-      }
-      .btn-b {
-        margin-top: 22px;
-      }
-      .btn-ab:active {
-        transform: translateY(2px);
-        box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.35), 0 2px 3px rgba(0, 0, 0, 0.45);
-      }
-
-      /* Franja inferior: Select / marca / Start */
-      .gba-inferior {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 22px;
-        margin-top: 12px;
-      }
-      .pill {
-        appearance: none;
-        border: none;
-        width: 52px;
-        height: 14px;
-        border-radius: 7px;
-        background: #262239;
-        box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.12), 0 3px 4px rgba(0, 0, 0, 0.45);
-        cursor: pointer;
-        touch-action: none;
-        transform: rotate(-22deg);
-        position: relative;
-      }
-      .pill:active {
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
-      }
-      .pill-etiqueta {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 6px;
-        color: #b8b0e8;
-        text-align: center;
-        margin-top: 4px;
-        letter-spacing: 1px;
-      }
-      .gba-marca {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 9px;
-        color: #b8b0e8;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-        letter-spacing: 2px;
       }
     </style>
   </head>
   <body>
-    <div id="juego">
-      <div class="gba">
-        <div class="gba-cuerpo">
-          <div class="gba-lado">
-            <div class="dpad">
-              <button class="dpad-btn dpad-up" data-tecla="ArrowUp" aria-label="Arriba"></button>
-              <button class="dpad-btn dpad-left" data-tecla="ArrowLeft" aria-label="Izquierda"></button>
-              <span class="dpad-centro dpad-mid"></span>
-              <button class="dpad-btn dpad-right" data-tecla="ArrowRight" aria-label="Derecha"></button>
-              <button class="dpad-btn dpad-down" data-tecla="ArrowDown" aria-label="Abajo"></button>
+    <!-- Marco Game Boy Color portado 1:1 de chase-mew/pokemon-js
+         (src/components/Gameboy.tsx). Los data-tecla los cablea src/marcoGba.js. -->
+    <div class="gameboy" id="GameBoy">
+      <div class="display-section">
+        <div class="screen-area">
+          <div class="power">
+            <div class="indicator">
+              <div class="led"></div>
+              <span class="arc" style="z-index: 2"></span>
+              <span class="arc" style="z-index: 1"></span>
+              <span class="arc" style="z-index: 0"></span>
             </div>
+            POWER
           </div>
-          <div class="gba-bisel">
-            <div id="consola"></div>
-          </div>
-          <div class="gba-lado">
-            <div class="ab">
-              <button class="btn-ab btn-a" data-tecla="KeyZ" aria-label="A">A</button>
-              <button class="btn-ab btn-b" data-tecla="KeyX" aria-label="B">B</button>
+
+          <div class="display"><div id="consola"></div></div>
+
+          <div class="label">
+            <div class="title">GAME BOY</div>
+            <div class="subtitle">
+              <span class="c">C</span>
+              <span class="o1">O</span>
+              <span class="l">L</span>
+              <span class="o2">O</span>
+              <span class="r">R</span>
             </div>
           </div>
         </div>
-        <div class="gba-inferior">
-          <div>
-            <button class="pill" data-tecla="Escape" aria-label="Select"></button>
-            <div class="pill-etiqueta">SELECT</div>
+
+        <div class="nintendo">Nintendo</div>
+      </div>
+      <div class="control-section">
+        <div class="controls">
+          <div class="dpad">
+            <div class="up" data-tecla="ArrowUp"><i>▲</i></div>
+            <div class="right" data-tecla="ArrowRight"><i>▶</i></div>
+            <div class="down" data-tecla="ArrowDown"><i>▼</i></div>
+            <div class="left" data-tecla="ArrowLeft"><i>◀</i></div>
+            <div class="middle"></div>
           </div>
-          <span class="gba-marca">CCL 2026 · REGIÓN QUIAL</span>
-          <div>
-            <button class="pill" data-tecla="Enter" aria-label="Start"></button>
-            <div class="pill-etiqueta">START</div>
+          <div class="a-b">
+            <div class="b" data-tecla="KeyX">B</div>
+            <div class="a" data-tecla="KeyZ">A</div>
           </div>
         </div>
+
+        <div class="start-select">
+          <div class="select" data-tecla="Escape">SELECT</div>
+          <div class="start" data-tecla="Enter">START</div>
+        </div>
+      </div>
+
+      <div class="speaker">
+        <div class="dot placeholder"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot placeholder"></div>
+
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+
+        <div class="dot placeholder"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot closed"></div>
+        <div class="dot open"></div>
+        <div class="dot placeholder"></div>
       </div>
     </div>
     <script type="module" src="/src/main.js"></script>

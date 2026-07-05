@@ -6,6 +6,7 @@ import { MAPAS } from '../data/maps.js';
 import { getContenido } from '../data/content.js';
 import { entrarConFundido } from '../systems/transiciones.js';
 import { TECLAS_ACCION } from '../systems/controles.js';
+import { reproducirMusica } from '../systems/musica.js';
 
 const SPAWN = { tileX: 20, tileY: 13 };
 const AVATAR_DEFAULT = 'rover_m';
@@ -18,6 +19,7 @@ export default class WorldScene extends Phaser.Scene {
 
   create() {
     entrarConFundido(this);
+    reproducirMusica(this, 'mapa');
     this.mapa = this.make.tilemap({ key: MAPAS.PRUEBA.key });
     const tileset = this.mapa.addTilesetImage('placeholder', TILESET_KEY);
 

@@ -13,6 +13,7 @@ import {
 } from '../systems/placeholders.js';
 import { cargarAssetsConPlaceholder } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
+import { cargarMusica } from '../systems/musica.js';
 import { MAPAS } from '../data/maps.js';
 
 // Assets [MILO] con su ruta fija y su placeholder generado por código.
@@ -82,7 +83,14 @@ export default class BootScene extends Phaser.Scene {
     const assetsListos = cargarAssetsConPlaceholder(this, ASSETS_MILO).then(() => {
       AVATARES.forEach((key) => crearAnimacionesCaminata(this, key));
     });
+    const musicaLista = new Promise((resolver) => {
+      cargarMusica(this);
+      this.load.once('complete', resolver);
+      this.load.start();
+    });
 
-    Promise.all([assetsListos, fuenteLista]).then(() => this.scene.start(SCENE_KEYS.TITLE));
+    Promise.all([assetsListos, fuenteLista, musicaLista]).then(() =>
+      this.scene.start(SCENE_KEYS.TITLE)
+    );
   }
 }

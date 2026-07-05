@@ -4,6 +4,7 @@ import { getContenido } from '../data/content.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { LOGO_KEY, FONDO_MENU_KEY } from '../systems/placeholders.js';
 import { alPresionarAccion } from '../systems/controles.js';
+import { reproducirMusica } from '../systems/musica.js';
 
 // Title screen: logo (o texto placeholder) + "INICIAR AVENTURA" parpadeante.
 export default class TitleScene extends Phaser.Scene {
@@ -13,7 +14,11 @@ export default class TitleScene extends Phaser.Scene {
 
   create() {
     entrarConFundido(this);
+    reproducirMusica(this, 'titulo');
     this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
+    this.add
+      .text(GAME_WIDTH - 8, 8, 'M: música', { ...TEXT_STYLE, color: '#88a0b8' })
+      .setOrigin(1, 0);
     const portada = getContenido('portada');
 
     if (this.textures.exists(LOGO_KEY)) {

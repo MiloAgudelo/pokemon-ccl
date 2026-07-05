@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import './gameboy.css';
 import { GAME_WIDTH, GAME_HEIGHT } from './config.js';
 import BootScene from './scenes/BootScene.js';
 import TitleScene from './scenes/TitleScene.js';
@@ -8,10 +9,12 @@ import IntroScene from './scenes/IntroScene.js';
 import WorldScene from './scenes/WorldScene.js';
 import DialogueScene from './scenes/DialogueScene.js';
 import { conectarMarcoGba } from './marcoGba.js';
+import { conectarMute } from './systems/musica.js';
 
-// Espacio que ocupa el marco de consola GBA alrededor del canvas.
-const MARGEN_MARCO_X = 300;
-const MARGEN_MARCO_Y = 120;
+// Espacio que ocupa el marco Game Boy Color alrededor del canvas
+// (paddings de body/carcasa/bisel + etiqueta GAME BOY COLOR + Nintendo).
+const MARGEN_MARCO_X = 210;
+const MARGEN_MARCO_Y = 265;
 
 // Zoom entero más grande que quepa en la ventana (mínimo 1): píxel nítido
 // a cualquier tamaño de pantalla.
@@ -51,6 +54,7 @@ window.addEventListener('resize', () => {
 });
 
 conectarMarcoGba();
+conectarMute(juego);
 
 // Handle de inspección para depurar desde la consola del navegador (solo dev).
 if (import.meta.env.DEV) {

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS } from '../config.js';
 import { irConFundido, entrarConFundido } from '../systems/transiciones.js';
 import { OAK_KEY, FONDO_MENU_KEY } from '../systems/placeholders.js';
+import { reproducirMusica } from '../systems/musica.js';
 
 // Intro del Profesor Oak: su sprite en pantalla y la carta (pantalla 2 de la
 // Ayuda) como diálogo con el nombre del jugador interpolado. Al terminar el
@@ -13,6 +14,7 @@ export default class IntroScene extends Phaser.Scene {
 
   create() {
     entrarConFundido(this);
+    reproducirMusica(this, 'intro_oak');
     this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
     this.add.image(GAME_WIDTH / 2, GAME_HEIGHT * 0.3, OAK_KEY).setScale(3);
     this.add
