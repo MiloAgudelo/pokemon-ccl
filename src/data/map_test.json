@@ -8,8 +8,8 @@
   "height": 15,
   "tilewidth": 16,
   "tileheight": 16,
-  "nextlayerid": 3,
-  "nextobjectid": 1,
+  "nextlayerid": 4,
+  "nextobjectid": 6,
   "tilesets": [
     {
       "firstgid": 1,
@@ -80,6 +80,73 @@
         4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
         4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
         4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+      ]
+    },
+    {
+      "id": 3,
+      "name": "objetos",
+      "type": "objectgroup",
+      "draworder": "topdown",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "cartel_capitulos",
+          "x": 112,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "rotation": 0,
+          "visible": true,
+          "properties": [{ "name": "content_id", "type": "string", "value": "capitulos" }]
+        },
+        {
+          "id": 2,
+          "name": "npc_convocados",
+          "x": 208,
+          "y": 32,
+          "width": 16,
+          "height": 16,
+          "rotation": 0,
+          "visible": true,
+          "properties": [{ "name": "content_id", "type": "string", "value": "convocados" }]
+        },
+        {
+          "id": 3,
+          "name": "npc_alimentacion",
+          "x": 32,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "rotation": 0,
+          "visible": true,
+          "properties": [{ "name": "content_id", "type": "string", "value": "alimentacion" }]
+        },
+        {
+          "id": 4,
+          "name": "npc_equipamiento",
+          "x": 256,
+          "y": 160,
+          "width": 16,
+          "height": 16,
+          "rotation": 0,
+          "visible": true,
+          "properties": [{ "name": "content_id", "type": "string", "value": "equipamiento" }]
+        },
+        {
+          "id": 5,
+          "name": "cartel_ruta_acceso",
+          "x": 192,
+          "y": 192,
+          "width": 16,
+          "height": 16,
+          "rotation": 0,
+          "visible": true,
+          "properties": [{ "name": "content_id", "type": "string", "value": "ruta_acceso" }]
+        }
       ]
     }
   ]

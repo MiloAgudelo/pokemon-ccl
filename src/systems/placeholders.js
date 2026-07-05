@@ -5,6 +5,8 @@
 import { TILE_SIZE } from '../config.js';
 
 export const TILESET_KEY = 'tileset_placeholder';
+export const NPC_KEY = 'npc_placeholder';
+export const CARTEL_KEY = 'cartel_placeholder';
 
 // Índices de tile dentro del tileset placeholder (gid = índice + 1 en Tiled).
 const TILE_COLORS = [
@@ -31,6 +33,35 @@ export function createTilesetTexture(scene) {
     ctx.fillRect(x + 10, 9, 2, 2);
   });
 
+  canvas.refresh();
+}
+
+// NPC placeholder: rectángulo 16×32 verde azulado con "cara" clara.
+export function createNpcTexture(scene) {
+  if (scene.textures.exists(NPC_KEY)) return;
+
+  const canvas = scene.textures.createCanvas(NPC_KEY, 16, 32);
+  const ctx = canvas.getContext();
+  ctx.fillStyle = '#2f8f8f';
+  ctx.fillRect(3, 4, 10, 26);
+  ctx.fillStyle = '#c8e8e8';
+  ctx.fillRect(5, 8, 6, 5);
+  canvas.refresh();
+}
+
+// Cartel placeholder: tabla amarilla 16×16 con borde.
+export function createCartelTexture(scene) {
+  if (scene.textures.exists(CARTEL_KEY)) return;
+
+  const canvas = scene.textures.createCanvas(CARTEL_KEY, 16, 16);
+  const ctx = canvas.getContext();
+  ctx.fillStyle = '#907040';
+  ctx.fillRect(6, 8, 4, 8);
+  ctx.fillStyle = '#d8b048';
+  ctx.fillRect(1, 1, 14, 10);
+  ctx.fillStyle = '#705828';
+  ctx.fillRect(3, 4, 10, 1);
+  ctx.fillRect(3, 7, 10, 1);
   canvas.refresh();
 }
 

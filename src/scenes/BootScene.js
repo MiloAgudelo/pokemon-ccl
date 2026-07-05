@@ -1,6 +1,11 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, TEXT_STYLE, SCENE_KEYS, FONT_FAMILY } from '../config.js';
-import { createTilesetTexture, createPlayerTexture } from '../systems/placeholders.js';
+import {
+  createTilesetTexture,
+  createPlayerTexture,
+  createNpcTexture,
+  createCartelTexture,
+} from '../systems/placeholders.js';
 import { cargarAssetsConPlaceholder } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
 import { MAPAS } from '../data/maps.js';
@@ -38,6 +43,8 @@ export default class BootScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     createTilesetTexture(this);
+    createNpcTexture(this);
+    createCartelTexture(this);
     Object.values(MAPAS).forEach(({ key, data }) => {
       this.cache.tilemap.add(key, { format: Phaser.Tilemaps.Formats.TILED_JSON, data });
     });

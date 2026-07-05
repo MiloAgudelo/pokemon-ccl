@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, ZOOM } from './config.js';
 import BootScene from './scenes/BootScene.js';
 import WorldScene from './scenes/WorldScene.js';
+import DialogueScene from './scenes/DialogueScene.js';
 
 const juego = new Phaser.Game({
   type: Phaser.AUTO,
@@ -12,7 +13,7 @@ const juego = new Phaser.Game({
   pixelArt: true,
   roundPixels: true,
   backgroundColor: '#000000',
-  scene: [BootScene, WorldScene],
+  scene: [BootScene, WorldScene, DialogueScene],
 });
 
 // Handle de inspección para depurar desde la consola del navegador (solo dev).
