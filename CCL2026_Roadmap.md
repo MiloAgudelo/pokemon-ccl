@@ -193,7 +193,7 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - [x] Fase 0 — Esqueleto _(2026-07-04)_
 - [x] Fase 1 — Movimiento y colisión _(2026-07-04, Checkpoint 1 ✔)_
 - [x] Fase 2 — Diálogo y contenido _(2026-07-04)_
-- [ ] Fase 3 — Flujo de entrada
+- [x] Fase 3 — Flujo de entrada _(2026-07-04, Checkpoint 2 ✔)_
 - [ ] Fase 4 — Mapa real
 - [ ] Fase 5 — Progresión
 - [ ] Fase 6 — Móvil y pulido
@@ -219,3 +219,7 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - La entrada `portada` lleva campos extra (`subtitulo`, `prompt`) que usará el title screen (Fase 3).
 - Los NPCs bloquean el paso (se interactúa desde la casilla adyacente, como en Pokémon).
 - `{nombre}` se interpola desde el registry; default "ROVER" hasta que exista el input de nombre (Fase 3).
+
+**Fase 3 (2026-07-04)** — Completada. Flujo completo: title screen (logo [MILO] con fallback a texto, prompt parpadeante) → input de nombre (campo HTML estilo GBA, teclado nativo en móvil, validación de vacío, mayúsculas, registry + localStorage con try/catch para contextos que lo bloqueen) → selección de avatar (flechas/A/D + acción; tap selecciona, segundo tap confirma) → intro del Profesor Oak (pantalla 2 como diálogo con `{nombre}` interpolado, sprite placeholder) → fundido al mapa. Fundidos GBA entre todas las escenas (`src/systems/transiciones.js`). Verificado de punta a punta, incluido el camino de replay (volver al title y repetir el flujo).
+- **Checkpoint 2 (thermo-nuclear) ✔** — 1 crítico, 3 mayores, 5 menores. Atendidos (hallazgos 1-6): guard de transición sin estado propio (bloquea solo con fade-out en curso; un fade-in congelado por pausa ya no soft-lockea — bug encontrado y corregido durante la verificación), listener RESUME de Intro con `once`, botón de acción centralizado en `src/systems/controles.js` (filtro de auto-repeat incluido: mantener ENTER ya no atraviesa el flujo), tap-confirma en avatar, valor del input sin interpolación HTML, claves de registry/localStorage unificadas en `REGISTRY_KEYS`.
+- **Deuda técnica** (hallazgos menores 7-9, atender a más tardar en Fase 5): (7) `WorldScene` — ternario textura-por-tipo → tabla declarativa cuando la Fase 4 agregue tipos ("zona" hoy cae en NPC por el else); (8) `TitleScene` usa `getContenido('portada')` sin guard contra null — agregar `getContenidoRequerido` que falle con mensaje claro para entradas tipo "sistema"; (9) paleta de colores (`#88a0b8`, `#f8d048`) y timers de parpadeo duplicados → `PALETA` en config + helper `parpadear` cuando la Fase 5 construya el HUD.
