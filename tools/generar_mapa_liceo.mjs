@@ -145,13 +145,13 @@ const puntos = [
   { nombre: 'cartel_equipos', tx: 34, ty: 19, cid: 'equipos' },
   { nombre: 'cartel_noche_cultural', tx: 53, ty: 26, cid: 'noche_cultural' },
   { nombre: 'npc_hall_of_fame', tx: 54, ty: 8, cid: 'hall_of_fame' },
-  // Los 6 gimnasios (Fase 5 les asigna contenido e insignia individual)
-  { nombre: 'gimnasio_1', tx: 25, ty: 26, cid: 'gimnasios' },
-  { nombre: 'gimnasio_2', tx: 38, ty: 28, cid: 'gimnasios' },
-  { nombre: 'gimnasio_3', tx: 10, ty: 21, cid: 'gimnasios' },
-  { nombre: 'gimnasio_4', tx: 44, ty: 8, cid: 'gimnasios' },
-  { nombre: 'gimnasio_5', tx: 24, ty: 8, cid: 'gimnasios' },
-  { nombre: 'gimnasio_6', tx: 46, ty: 37, cid: 'gimnasios' },
+  // Los 6 gimnasios de liderazgo (cada uno desbloquea su insignia)
+  { nombre: 'gimnasio_1', tx: 25, ty: 26, cid: 'gimnasio_comunicacion' },
+  { nombre: 'gimnasio_2', tx: 38, ty: 28, cid: 'gimnasio_equipo' },
+  { nombre: 'gimnasio_3', tx: 10, ty: 21, cid: 'gimnasio_participacion' },
+  { nombre: 'gimnasio_4', tx: 44, ty: 8, cid: 'gimnasio_ods' },
+  { nombre: 'gimnasio_5', tx: 24, ty: 8, cid: 'gimnasio_proyectos' },
+  { nombre: 'gimnasio_6', tx: 46, ty: 37, cid: 'gimnasio_inclusion' },
 ];
 
 // --- validaciones ---

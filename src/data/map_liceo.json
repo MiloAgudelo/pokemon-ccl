@@ -296,7 +296,7 @@
       {
        "name": "content_id",
        "type": "string",
-       "value": "gimnasios"
+       "value": "gimnasio_comunicacion"
       }
      ]
     },
@@ -313,7 +313,7 @@
       {
        "name": "content_id",
        "type": "string",
-       "value": "gimnasios"
+       "value": "gimnasio_equipo"
       }
      ]
     },
@@ -330,7 +330,7 @@
       {
        "name": "content_id",
        "type": "string",
-       "value": "gimnasios"
+       "value": "gimnasio_participacion"
       }
      ]
     },
@@ -347,7 +347,7 @@
       {
        "name": "content_id",
        "type": "string",
-       "value": "gimnasios"
+       "value": "gimnasio_ods"
       }
      ]
     },
@@ -364,7 +364,7 @@
       {
        "name": "content_id",
        "type": "string",
-       "value": "gimnasios"
+       "value": "gimnasio_proyectos"
       }
      ]
     },
@@ -381,7 +381,7 @@
       {
        "name": "content_id",
        "type": "string",
-       "value": "gimnasios"
+       "value": "gimnasio_inclusion"
       }
      ]
     }

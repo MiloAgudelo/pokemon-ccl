@@ -18,6 +18,7 @@ import { EDIFICIOS, urlEdificio } from '../data/edificios.js';
 import { cargarAssetsConPlaceholder } from '../systems/loader.js';
 import { crearAnimacionesCaminata } from '../systems/GridMovement.js';
 import { cargarMusica } from '../systems/musica.js';
+import { iniciarInsignias } from '../systems/insignias.js';
 import { MAPAS } from '../data/maps.js';
 
 // Assets [MILO] con su ruta fija y su placeholder generado por código.
@@ -88,6 +89,7 @@ export default class BootScene extends Phaser.Scene {
       this.game.domContainer.style.top = '0px';
     }
 
+    iniciarInsignias(this.registry);
     createMenuBackgroundTexture(this, GAME_WIDTH, GAME_HEIGHT);
     this.add.image(0, 0, FONDO_MENU_KEY).setOrigin(0);
     this.add

@@ -57,12 +57,71 @@
       "id": "gimnasios",
       "titulo": "Gimnasios de Liderazgo",
       "tipo": "npc",
-      "insignia": true,
       "paginas": [
         "En el CCL 2026, desbloquearás habilidades clave para tu servicio:",
         "Gimnasio de Comunicación Asertiva. Gimnasio de Trabajo en Equipo. Gimnasio de Participación Juvenil.",
         "Gimnasio de Scouts por los ODS (Innovadores de Impacto). Gimnasio de Diseño de Proyectos. Gimnasio de Liderazgos Diversos e Inclusión.",
         "Gimnasio de Acción Humanitaria: ¡Eje transversal desbloqueado!"
+      ]
+    },
+    {
+      "id": "gimnasio_comunicacion",
+      "titulo": "Gimnasio de Comunicación",
+      "tipo": "npc",
+      "insignia": "Comunicación Asertiva",
+      "paginas": [
+        "¡Bienvenido al Gimnasio de Comunicación Asertiva!",
+        "Aquí desbloquearás una habilidad clave para tu servicio como líder."
+      ]
+    },
+    {
+      "id": "gimnasio_equipo",
+      "titulo": "Gimnasio de Trabajo en Equipo",
+      "tipo": "npc",
+      "insignia": "Trabajo en Equipo",
+      "paginas": [
+        "¡Bienvenido al Gimnasio de Trabajo en Equipo!",
+        "Aquí desbloquearás una habilidad clave para tu servicio como líder."
+      ]
+    },
+    {
+      "id": "gimnasio_participacion",
+      "titulo": "Gimnasio de Participación",
+      "tipo": "npc",
+      "insignia": "Participación Juvenil",
+      "paginas": [
+        "¡Bienvenido al Gimnasio de Participación Juvenil!",
+        "Aquí desbloquearás una habilidad clave para tu servicio como líder."
+      ]
+    },
+    {
+      "id": "gimnasio_ods",
+      "titulo": "Gimnasio de Scouts por los ODS",
+      "tipo": "npc",
+      "insignia": "Innovadores de Impacto",
+      "paginas": [
+        "¡Bienvenido al Gimnasio de Scouts por los ODS (Innovadores de Impacto)!",
+        "Aquí desbloquearás una habilidad clave para tu servicio como líder."
+      ]
+    },
+    {
+      "id": "gimnasio_proyectos",
+      "titulo": "Gimnasio de Diseño de Proyectos",
+      "tipo": "npc",
+      "insignia": "Diseño de Proyectos",
+      "paginas": [
+        "¡Bienvenido al Gimnasio de Diseño de Proyectos!",
+        "Aquí desbloquearás una habilidad clave para tu servicio como líder."
+      ]
+    },
+    {
+      "id": "gimnasio_inclusion",
+      "titulo": "Gimnasio de Liderazgos Diversos",
+      "tipo": "npc",
+      "insignia": "Liderazgos Diversos e Inclusión",
+      "paginas": [
+        "¡Bienvenido al Gimnasio de Liderazgos Diversos e Inclusión!",
+        "Aquí desbloquearás una habilidad clave para tu servicio como líder."
       ]
     },
     {
@@ -150,6 +209,30 @@
       "tipo": "npc",
       "paginas": [
         "[PENDIENTE: Definición de vestuario por día y uso de la pañoleta del evento]."
+      ]
+    },
+    {
+      "id": "hall_of_fame_completo",
+      "titulo": "Hall of Fame",
+      "tipo": "zona",
+      "paginas": [
+        "¡Felicidades, {nombre}! Completaste el recorrido por la Región Quial con las 7 insignias de liderazgo.",
+        "SIEMPRE LISTOS PARA SERVIR.",
+        "Director Nacional de Programa de Jóvenes — Scouts de Colombia.",
+        "scouts.ods@scout.org.co — Comisionado Nacional de Scouts por los ODS.",
+        "rovers@scout.org.co — Comisionado Nacional Rover.",
+        "ccl@scout.org.co — Miembro Staff CCL 2026.",
+        "Nos vemos del 15 al 17 de agosto de 2026. ¡La aventura apenas comienza!"
+      ]
+    },
+    {
+      "id": "easter_egg_staff",
+      "titulo": "¿...?",
+      "tipo": "sistema",
+      "url": "[PENDIENTE: URL del video de presentación del Staff]",
+      "paginas": [
+        "¡Encontraste la Pokébola oculta del Staff!",
+        "[PENDIENTE: URL del video de presentación del Staff]."
       ]
     },
     {

@@ -58,6 +58,28 @@ export function createTilesetTexture(scene) {
   canvas.refresh();
 }
 
+export const POKEBOLA_KEY = 'pokebola';
+
+// Pokébola 12×12 para el easter egg (mitad roja, mitad blanca, banda negra).
+export function createPokebolaTexture(scene) {
+  if (scene.textures.exists(POKEBOLA_KEY)) return;
+
+  const canvas = scene.textures.createCanvas(POKEBOLA_KEY, 12, 12);
+  const ctx = canvas.getContext();
+  ctx.fillStyle = '#d83028';
+  ctx.beginPath();
+  ctx.arc(6, 6, 5.5, Math.PI, 0);
+  ctx.fill();
+  ctx.fillStyle = '#f8f8f8';
+  ctx.beginPath();
+  ctx.arc(6, 6, 5.5, 0, Math.PI);
+  ctx.fill();
+  ctx.fillStyle = '#202020';
+  ctx.fillRect(0, 5, 12, 2);
+  ctx.fillRect(5, 4, 2, 4);
+  canvas.refresh();
+}
+
 // Rectángulo de color con borde: placeholder genérico para edificios
 // decorativos cuyo PNG real aún no está en /assets/tilesets/edificios/.
 export function createRectanguloTexture(scene, key, ancho, alto, color) {
