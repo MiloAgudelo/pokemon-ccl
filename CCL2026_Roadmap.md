@@ -195,7 +195,7 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - [x] Fase 2 — Diálogo y contenido _(2026-07-04)_
 - [x] Fase 3 — Flujo de entrada _(2026-07-04, Checkpoint 2 ✔)_
 - [x] Fase 4 — Mapa real _(2026-07-05, borrador programático; hitos de Cali pendientes de [MILO])_
-- [ ] Fase 5 — Progresión
+- [x] Fase 5 — Progresión _(2026-07-05, Checkpoint 3 ✔)_
 - [ ] Fase 6 — Móvil y pulido
 - [ ] Fase 7 — Despliegue
 
@@ -242,5 +242,9 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - Layout **estilizado/libre**, no réplica del Liceo real. Se refina editando el generador o el JSON en Tiled.
 - **Sin interiores**: todo el contenido en exteriores (menos escenas, más exploración continua).
 - Pendiente [MILO] para cerrar Fase 4 del todo: ilustraciones IA de los hitos de Cali (Cristo Rey, Torre de Cali, Gato del Río) para pasar por `pixelate.py` y colocar en la zona Cali; el generador ya deja el espacio (este del río).
+
+**Fase 5 (2026-07-05)** — Completada. Progresión: 6 gimnasios con contenido e insignia individual (entradas nuevas en `content.json` con los nombres reales de la pantalla 6; el texto del módulo es placeholder editable), Acción Humanitaria pre-desbloqueada (7 insignias en total, derivadas del contenido — agregar un gimnasio al JSON no toca código), HUD "INSIGNIAS n/7" en el mundo, página de obtención estilo GBA al final del diálogo del gimnasio, Hall of Fame con pantalla de cierre y felicitación al completar las 7, persistencia en localStorage con identidad por id de contenido, y easter egg de la Pokébola del Staff (URL `[PENDIENTE]` en `content.json`; al ponerla, el clic abre el video). Desviación: la Pokébola vive en el title screen y no en la intro (la intro pasa pausada bajo el diálogo de Oak y no recibiría el clic).
+- **Checkpoint 3 (thermo-nuclear) ✔** — 0 críticos, 6 mayores, 5 menores. Atendidos en el mismo día: identidad de insignias por id con filtro de esquemas viejos (2), mute inmune al tipeo del nombre (3), reglas de progresión consolidadas en `insignias.js` — `resolverContentId`/`paginaDeObtencion` (1), cargas del loader secuenciales vía `prometerCarga` (4), spawn como propiedad del mapa validada por el generador (6), helpers `alPresionarB`/`alPresionarSalto` en `controles.js` (7), WorldScene por el helper canónico de acción con tap-para-interactuar de regalo (8), mapa de prueba muerto eliminado (9), `reproducirMusica` no confía solo en la memoria del módulo (10).
+- **Deuda restante**: (5) el modelo de zoom entero no puede servir pantallas <480px — se reemplaza el modelo (escala fraccional CSS + medición real del DOM) como primer trabajo de Fase 6; (11) verificar en Fase 7 que Vite reescriba la URL de la fuente en `index.html` con `base` no-raíz.
 
 - **Deuda técnica** (hallazgos menores 7-9, atender a más tardar en Fase 5): (7) `WorldScene` — ternario textura-por-tipo → tabla declarativa cuando la Fase 4 agregue tipos ("zona" hoy cae en NPC por el else); (8) `TitleScene` usa `getContenido('portada')` sin guard contra null — agregar `getContenidoRequerido` que falle con mensaje claro para entradas tipo "sistema"; (9) paleta de colores (`#88a0b8`, `#f8d048`) y timers de parpadeo duplicados → `PALETA` en config + helper `parpadear` cuando la Fase 5 construya el HUD.
