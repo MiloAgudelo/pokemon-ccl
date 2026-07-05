@@ -1,9 +1,8 @@
 import Phaser from 'phaser';
-import { SCENE_KEYS } from '../config.js';
+import { SCENE_KEYS, REGISTRY_KEYS } from '../config.js';
 import { TILESET_KEY } from '../systems/placeholders.js';
 import GridMovement from '../systems/GridMovement.js';
-
-export const MAP_KEY = 'map_test';
+import { MAPAS } from '../data/maps.js';
 
 const SPAWN = { tileX: 10, tileY: 8 };
 const AVATAR_DEFAULT = 'rover_m';
@@ -15,14 +14,14 @@ export default class WorldScene extends Phaser.Scene {
   }
 
   create() {
-    this.mapa = this.make.tilemap({ key: MAP_KEY });
+    this.mapa = this.make.tilemap({ key: MAPAS.PRUEBA.key });
     const tileset = this.mapa.addTilesetImage('placeholder', TILESET_KEY);
 
     this.mapa.createLayer('suelo', tileset, 0, 0);
     this.colision = this.mapa.createLayer('colision', tileset, 0, 0).setVisible(false);
 
     // El avatar lo fija la selección de personaje (Fase 3); mientras tanto, default.
-    const avatar = this.registry.get('avatar') || AVATAR_DEFAULT;
+    const avatar = this.registry.get(REGISTRY_KEYS.AVATAR) || AVATAR_DEFAULT;
     this.jugador = this.add.sprite(0, 0, avatar, 0);
     this.movimiento = new GridMovement(this, this.jugador, {
       ...SPAWN,

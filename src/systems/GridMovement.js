@@ -76,8 +76,10 @@ export default class GridMovement {
 
   detener() {
     if (this.enMovimiento) return;
+    const idle = this.frameIdle(this.dir);
+    if (Number(this.sprite.frame.name) === idle && !this.sprite.anims.isPlaying) return;
     this.sprite.anims.stop();
-    this.sprite.setFrame(this.frameIdle(this.dir));
+    this.sprite.setFrame(idle);
   }
 }
 

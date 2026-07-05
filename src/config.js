@@ -14,6 +14,12 @@ export const TEXT_STYLE = {
   color: '#f8f8f8',
 };
 
+// Claves del registry global (estado compartido entre escenas).
+export const REGISTRY_KEYS = {
+  AVATAR: 'avatar',
+  NOMBRE: 'nombre',
+};
+
 export const SCENE_KEYS = {
   BOOT: 'Boot',
   TITLE: 'Title',

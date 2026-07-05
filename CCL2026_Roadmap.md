@@ -191,7 +191,7 @@ Y al cerrar cada fase, pedirle que actualice una sección de estado al final de 
 _(Claude Code: actualizar esta sección al final de cada fase.)_
 
 - [x] Fase 0 — Esqueleto _(2026-07-04)_
-- [ ] Fase 1 — Movimiento y colisión
+- [x] Fase 1 — Movimiento y colisión _(2026-07-04, Checkpoint 1 ✔)_
 - [ ] Fase 2 — Diálogo y contenido
 - [ ] Fase 3 — Flujo de entrada
 - [ ] Fase 4 — Mapa real
@@ -206,3 +206,9 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - Fuente Press Start 2P auto-hospedada en `/assets/ui/fonts/PressStart2P.ttf` (descargada de Google Fonts, OFL) — no depende de red en runtime.
 - Vite sirve la carpeta `/assets` como raíz pública (`publicDir: 'assets'`): la ruta en disco de los assets [MILO] es exactamente la del roadmap (ej. `/assets/sprites/rover_m.png`); en código se piden sin el prefijo (`/sprites/rover_m.png`).
 - `tools/pixelate.py` existe como stub; su implementación real es tarea de la Fase 4.
+
+**Fase 1 (2026-07-04)** — Completada. Movimiento grid-based tile por tile (flechas + WASD), colisión por chequeo de grilla contra la capa `colision` del tilemap, cámara con límites, sprite placeholder 16×32 con triángulo direccional y layout de frames idéntico al PNG real que entregará Milo (3 col × 4 filas). Desviaciones/decisiones:
+- Los assets [MILO] faltantes se detectan con un chequeo HEAD silencioso (`src/systems/loader.js`) en vez de dejar que el loader de Phaser falle con errores rojos en consola. Al soltar el PNG real en `/assets/sprites/` se usa automáticamente.
+- **Checkpoint 1 (thermo-nuclear) ✔** — 0 críticos, 1 mayor y 4 menores. Atendidos: patrón genérico "asset real o placeholder" extraído a `src/systems/loader.js` (mayor); clave+datos del mapa unificados en `src/data/maps.js`; claves del registry centralizadas en `REGISTRY_KEYS` (`src/config.js`); `detener()` con early-return si ya está idle.
+- **Deuda técnica** (no crítica, revisar en Fase 7): la URL de la fuente en `index.html` (`/ui/fonts/...`) asume despliegue en raíz; con `base` distinto (ej. GitHub Pages) hay que verificar que Vite la reescriba o usar ruta relativa. Las URLs de assets en runtime ya usan `import.meta.env.BASE_URL`.
+- **Compromiso de diseño para Fase 2** (de la revisión): el diálogo se implementa como escena overlay paralela que pausa `World` (`scene.pause`/`resume`), no como flags booleanos dentro del `update()` de World.
