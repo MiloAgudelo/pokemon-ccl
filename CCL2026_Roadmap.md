@@ -190,7 +190,7 @@ Y al cerrar cada fase, pedirle que actualice una sección de estado al final de 
 
 _(Claude Code: actualizar esta sección al final de cada fase.)_
 
-- [ ] Fase 0 — Esqueleto
+- [x] Fase 0 — Esqueleto _(2026-07-04)_
 - [ ] Fase 1 — Movimiento y colisión
 - [ ] Fase 2 — Diálogo y contenido
 - [ ] Fase 3 — Flujo de entrada
@@ -198,3 +198,11 @@ _(Claude Code: actualizar esta sección al final de cada fase.)_
 - [ ] Fase 5 — Progresión
 - [ ] Fase 6 — Móvil y pulido
 - [ ] Fase 7 — Despliegue
+
+### Notas por fase
+
+**Fase 0 (2026-07-04)** — Completada sin desviaciones. Detalles de implementación:
+- El contenido de la Ayuda #1 se toma de `CCL2026_Ayuda1_Contenido.md` (conversión fiel del PDF, confirmado por Milo como fuente oficial).
+- Fuente Press Start 2P auto-hospedada en `/assets/ui/fonts/PressStart2P.ttf` (descargada de Google Fonts, OFL) — no depende de red en runtime.
+- Vite sirve la carpeta `/assets` como raíz pública (`publicDir: 'assets'`): la ruta en disco de los assets [MILO] es exactamente la del roadmap (ej. `/assets/sprites/rover_m.png`); en código se piden sin el prefijo (`/sprites/rover_m.png`).
+- `tools/pixelate.py` existe como stub; su implementación real es tarea de la Fase 4.
