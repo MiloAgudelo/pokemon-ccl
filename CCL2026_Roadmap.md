@@ -125,8 +125,8 @@ Documento complementario al brief (`CCL2026_Juego_Interactivo_Brief.md`). Cada f
 
 **Objetivo**: que funcione bien en el celular, que es donde lo abrirá la mayoría.
 
-1. D-pad táctil superpuesto + botón de acción (solo visible en pantallas táctiles). Probar en viewport angosto (~380px).
-2. Ajuste de zoom responsivo: el canvas escala al tamaño de pantalla manteniendo múltiplos enteros cuando sea posible.
+1. **Marco de consola GBA en HTML/CSS** que envuelve el canvas (el wrapper `#consola` de `index.html` ya existe como punto de anclaje). Layout horizontal de GBA real: D-pad a la izquierda, botones A/B a la derecha, Start/Select abajo. Los botones del marco son los controles táctiles reales: D-pad = movimiento, A = acción/avanzar diálogo, B = cancelar (cerrar diálogo/volver). En desktop el marco es decorativo y el teclado sigue funcionando igual. La integración de input tiene un único punto de entrada: `src/systems/controles.js`. Referencias de concepto (todas son Game Boy vertical — adaptar a GBA horizontal): `chase-mew/pokemon-js` (GitHub), el Gameboy CodePen de Brandon Smith, `luttje/css-pokemon-gameboy` (GitHub). Probar en viewport angosto (~380px).
+2. Ajuste de zoom responsivo: el canvas (y su marco GBA) escala al tamaño de pantalla manteniendo múltiplos enteros cuando sea posible.
 3. Sonido (opcional, al final): música chiptune de fondo + SFX de pasos/diálogo. `[MILO]`: decidir si se usa música libre (OpenGameArt, licencias CC) o se omite. Botón de mute obligatorio si hay audio.
 4. Optimización de carga: sprites y tilesets en atlas si el tiempo de carga lo amerita.
 5. QA final: probar todos los puntos de contenido, verificar que ningún `[PENDIENTE]` visible haya quedado sin resolver o sin su placeholder "Próximamente" intencional.
